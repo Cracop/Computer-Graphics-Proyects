@@ -32,6 +32,14 @@ const char *fragmentShader2Source = "#version 330 core\n"
     "   FragColor = vec4(0.87f, 0.734f, 0.082f, 1.0f);\n"
     "}\n\0";
 
+//Lineas Negras
+const char *fragmentShader3Source = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "   FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);\n"
+    "}\n\0";
+
 int main()
 {
 // glfw: initialize and configure
@@ -90,30 +98,25 @@ int main()
     float vertices[] = {
         0.0f, 0.0f, 0.0f,
 
-        -0.07f, 0.0f, 0.0f,
-        -0.11f, 0.0f, 0.0f,
-        -0.09f, 0.06f, 0.0f,
+        -0.06f, 0.0f, 0.0f,
+        -0.1f, 0.0f, 0.0f,
+        -0.08f, 0.06f, 0.0f,
 
-        -0.09f, -0.06f, 0.0f,
-        -0.027f,-0.06f,0.0f,
-        -0.04f,-0.1f,0.0f,
+        -0.08f, -0.06f, 0.0f,
+        -0.017f,-0.06f,0.0f,
+        -0.03f,-0.1f,0.0f,
 
-         0.024f,-0.097f,0.0f,
-         0.075f,-0.06f,0.0f,
-         0.042f,-0.037f,0.0f,
+         0.034f,-0.097f,0.0f,
+         0.085f,-0.06f,0.0f,
+         0.052f,-0.037f,0.0f,
 
-         0.095f,0.0f,0.0f,
-         0.0755f,0.06f,0.0f,
-         0.043f,0.037f,0.0f,
+         0.105f,0.0f,0.0f,
+         0.0855f,0.06f,0.0f,
+         0.053f,0.037f,0.0f,
 
-         0.024f, 0.097f, 0.0f,
-        -0.027f,0.06f,0.0f,
-        -0.04f,0.097f,0.0f,
-
-
-
-        
-
+         0.034f, 0.097f, 0.0f,
+        -0.017f,0.06f,0.0f,
+        -0.03f,0.097f,0.0f,
 
     };
 
@@ -130,21 +133,19 @@ int main()
     13,14,15,
     14,15,3
 
-
-
-
-
     };  
-
+    //Indices de la parte amarilla
     unsigned int indices2[] = {  // note that we start from 0!
-    1, 0, 0    // second triangle
+    0,1,3, 
+    0,3,14,
+    0,14,13
     };
 
 
-    unsigned int VBOs[2], VAOs[2], EBOs[2];
-    glGenVertexArrays(2, VAOs); // we can also generate multiple VAOs or buffers at the same time
-    glGenBuffers(2, VBOs);
-    glGenBuffers(2, EBOs);
+    unsigned int VBOs[3], VAOs[3], EBOs[3];
+    glGenVertexArrays(3, VAOs); // we can also generate multiple VAOs or buffers at the same time
+    glGenBuffers(3, VBOs);
+    glGenBuffers(3, EBOs);
     // first triangle setup
     // --------------------
     glBindVertexArray(VAOs[0]);
@@ -197,7 +198,7 @@ int main()
         // when we draw the second triangle we want to use a different shader program so we switch to the shader program with our yellow fragment shader.
         glUseProgram(shaderProgramYellow);
         glBindVertexArray(VAOs[1]);
-        glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_INT, 0);	// this call should output a yellow triangle
+        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);	// this call should output a yellow triangle
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
