@@ -8,7 +8,7 @@ void processInput(GLFWwindow *window);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_HEIGHT = 800;
 
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
@@ -22,14 +22,14 @@ const char *fragmentShader1Source = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(0.21f, 0.035f, 0.789f, 1.0f);\n"
+    "   FragColor = vec4(0.199f, 0.0f, 0.398f, 1.0f);\n"
     "}\n\0";
-
+//Amarillo
 const char *fragmentShader2Source = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
+    "   FragColor = vec4(0.87f, 0.734f, 0.082f, 1.0f);\n"
     "}\n\0";
 
 int main()
@@ -83,25 +83,76 @@ int main()
     glAttachShader(shaderProgramYellow, fragmentShaderYellow);
     glLinkProgram(shaderProgramYellow);
 
-    float firstTriangle[] = {
-        -0.9f, -0.5f, 0.0f,  // left 
-        -0.0f, -0.5f, 0.0f,  // right
-        -0.45f, 0.5f, 0.0f,  // top 
-    };
-    float secondTriangle[] = {
-        0.0f, -0.5f, 0.0f,  // left
-        0.9f, -0.5f, 0.0f,  // right
-        0.45f, 0.5f, 0.0f   // top 
+    //1*1.5
+    //108 grados las rotaciones
+
+    float vertices[] = {
+        0.0f, 0.0f, 0.0f,
+
+        -0.18f, 0.0f, 0.0f,
+        -0.22f, 0.0f, 0.0f,
+        -0.2f, 0.06f, 0.0f,
+
+        -0.2f, -0.06f, 0.0f,
+        -0.137f,-0.06f,0.0f,
+        -0.15f,-0.1f,0.0f,
+
+        -0.086f,-0.097f,0.0f,
+        -0.035f,-0.06f,0.0f,
+        -0.068f,-0.037f,0.0f,
+
+        -0.015f,0.0f,0.0f,
+        -0.0345f,0.06f,0.0f,
+        -0.067f,0.037f,0.0f,
+
+        -0.086f, 0.097f, 0.0f,
+        -0.137f,0.06f,0.0f,
+        -0.15f,0.097f,0.0f,
+
+
+
+        
+
+
     };
 
-    unsigned int VBOs[2], VAOs[2];
+    //Indices de la parte morada
+    unsigned int indices1[] = {  // note that we start from 0!
+    1, 2, 3,
+    1,2,4,
+    4,5,6, 
+    5,6,7,
+    7,8,9,
+    8,9,10,
+    10,11,12,
+    11,12,13,
+    13,14,15,
+    14,15,3
+
+
+
+
+
+    };  
+
+    unsigned int indices2[] = {  // note that we start from 0!
+    1, 0, 0    // second triangle
+    };
+
+
+    unsigned int VBOs[2], VAOs[2], EBOs[2];
     glGenVertexArrays(2, VAOs); // we can also generate multiple VAOs or buffers at the same time
     glGenBuffers(2, VBOs);
+    glGenBuffers(2, EBOs);
     // first triangle setup
     // --------------------
     glBindVertexArray(VAOs[0]);
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(firstTriangle), firstTriangle, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[0]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);
+    
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);	// Vertex attributes stay the same
     glEnableVertexAttribArray(0);
     // glBindVertexArray(0); // no need to unbind at all as we directly bind a different VAO the next few lines
@@ -110,10 +161,17 @@ int main()
     // ---------------------
     glBindVertexArray(VAOs[1]);	// note that we bind to a different VAO now
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);	// and a different VBO
-    glBufferData(GL_ARRAY_BUFFER, sizeof(secondTriangle), secondTriangle, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
+    
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); // because the vertex data is tightly packed we can also specify 0 as the vertex attribute's stride to let OpenGL figure it out
     glEnableVertexAttribArray(0);
     // glBindVertexArray(0); // not really necessary as well, but beware of calls that could affect VAOs while this one is bound (like binding element buffer objects, or enabling/disabling vertex attributes)
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -133,12 +191,12 @@ int main()
         glUseProgram(shaderProgramPurple);
         // draw the first triangle using the data from our first VAO
         glBindVertexArray(VAOs[0]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);	// this call should output an orange triangle
+        glDrawElements(GL_TRIANGLES, 30, GL_UNSIGNED_INT, 0);	// this call should output an orange triangle
         // then we draw the second triangle using the data from the second VAO
         // when we draw the second triangle we want to use a different shader program so we switch to the shader program with our yellow fragment shader.
         glUseProgram(shaderProgramYellow);
         glBindVertexArray(VAOs[1]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);	// this call should output a yellow triangle
+        glDrawElements(GL_TRIANGLES, 0, GL_UNSIGNED_INT, 0);	// this call should output a yellow triangle
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -150,6 +208,7 @@ int main()
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(2, VAOs);
     glDeleteBuffers(2, VBOs);
+    glDeleteBuffers(2, EBOs);
     glDeleteProgram(shaderProgramPurple);
     glDeleteProgram(shaderProgramYellow);
 
@@ -176,3 +235,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
+
+
+//Para correr el programa
+// g++ Tarea2V!.cpp glad.c -ldl -lglfw
+
+//Usar dos EBOs https://stackoverflow.com/questions/60268642/unable-to-draw-multiple-objects-using-vaos-and-ebos-opengl
