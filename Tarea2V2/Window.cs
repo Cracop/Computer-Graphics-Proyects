@@ -5,12 +5,21 @@ using OpenTK.Windowing.Desktop;
 
 namespace Tarea2V2{
     public class Window : GameWindow {
-        float[] _vertices =
-        {
-             0.5f,  0.5f, 0.0f, // top right
-             0.5f, -0.5f, 0.0f, // bottom right
-            -0.5f, -0.5f, 0.0f, // bottom left
-            -0.5f,  0.5f, 0.0f, // top left
+        float[] _vertices = {
+            0.0f, 0.0f, 0.0f,
+
+            -0.06f, 0.0f, 0.0f,
+            -0.1f, 0.0f, 0.0f,
+            -0.08f, 0.06f, 0.0f,
+
+             0.034f, 0.097f, 0.0f,
+            -0.017f,0.06f,0.0f,
+            -0.03f,0.097f,0.0f,
+
+             0.105f,0.0f,0.0f,
+             0.0855f,0.06f,0.0f,
+             0.053f,0.037f,0.0f,
+
         };
 
         uint[] _indices =
@@ -20,10 +29,31 @@ namespace Tarea2V2{
             1, 2, 3  // Then the second will be the top-right half of the triangle
         };
 
-        private int _vertexBufferObject;
-        private int _vertexArrayObject;
+        //Indices de la parte morada
+        uint[] _indices1 = {  // note that we start from 0!
+            1,2,3,
+            3,5,6,
+            5,6,4,
+            7,8,9,
+            4,8,9
+        };  
+        //Indices de la parte amarilla
+        uint[] _indices2 = {  // note that we start from 0!
+            0,1,3, 
+            0,3,14,
+            0,14,13
+        };
+
+        private void invertir(){
+            for (int i = 0; i < _vertices.Length; i=i+3){
+                _vertices[i]=_vertices[i]*(-1);
+            }
+        }
+
+        private int[] _vertexBufferObject = new int[3];
+        private int[] _vertexArrayObject = new int[3];
         private Shader _shader;
-        private int _elementBufferObject;
+        private int[] _elementBufferObject = new int[3];
 
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
@@ -34,23 +64,23 @@ namespace Tarea2V2{
         {
             base.OnLoad();
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            _vertexBufferObject = GL.GenBuffer();
+            _vertexBufferObject[0] = GL.GenBuffer();
             // The second argument is the handle to our buffer.
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject[0]);
             GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
-            _vertexArrayObject = GL.GenVertexArray();
-            GL.BindVertexArray(_vertexArrayObject);
+            _vertexArrayObject[0] = GL.GenVertexArray();
+            GL.BindVertexArray(_vertexArrayObject[0]);
 
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
 
             // Enable variable 0 in the shader.
             GL.EnableVertexAttribArray(0);
 
-            _elementBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
+            _elementBufferObject[0] = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject[0]);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices1.Length * sizeof(uint), _indices1, BufferUsageHint.StaticDraw);
 
-            _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
+            _shader = new Shader("Shaders/shader.vert", "Shaders/shaderMorado.frag");
 
             _shader.Use();
         }
@@ -58,6 +88,7 @@ namespace Tarea2V2{
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+            invertir();
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -65,12 +96,13 @@ namespace Tarea2V2{
             _shader.Use();
 
             // Bind the VAO
-            GL.BindVertexArray(_vertexArrayObject);
+            GL.BindVertexArray(_vertexArrayObject[0]);
 
             // And then call our drawing function.
-            GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(PrimitiveType.Triangles, 30, DrawElementsType.UnsignedInt, 0);
 
             SwapBuffers();
+            return;
 
         }
 
@@ -101,8 +133,8 @@ namespace Tarea2V2{
             GL.UseProgram(0);
 
             // Delete all the resources.
-            GL.DeleteBuffer(_vertexBufferObject);
-            GL.DeleteVertexArray(_vertexArrayObject);
+            GL.DeleteBuffer(_vertexBufferObject[0]);
+            GL.DeleteVertexArray(_vertexArrayObject[0]);
 
             GL.DeleteProgram(_shader.Handle);
 
