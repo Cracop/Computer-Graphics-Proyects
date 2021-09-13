@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/rodrigobarrera/Desktop/ITAM/Sem_6/Graficas por Computadora/Tareas/Tarea2V2/Tarea2V2.csproj": {}
+  },
+  "projects": {
+    "/home/rodrigobarrera/Desktop/ITAM/Sem_6/Graficas por Computadora/Tareas/Tarea2V2/Tarea2V2.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/rodrigobarrera/Desktop/ITAM/Sem_6/Graficas por Computadora/Tareas/Tarea2V2/Tarea2V2.csproj",
+        "projectName": "Tarea2V2",
+        "projectPath": "/home/rodrigobarrera/Desktop/ITAM/Sem_6/Graficas por Computadora/Tareas/Tarea2V2/Tarea2V2.csproj",
+        "packagesPath": "/home/rodrigobarrera/.nuget/packages/",
+        "outputPath": "/home/rodrigobarrera/Desktop/ITAM/Sem_6/Graficas por Computadora/Tareas/Tarea2V2/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/rodrigobarrera/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "OpenTK": {
+              "target": "Package",
+              "version": "[4.6.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.400/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

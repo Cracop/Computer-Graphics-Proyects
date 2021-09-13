@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "T0/2Xkx3tQxBZeglk7eD0aYv1GXF+3Wqg/vCS0/jwjJx/qQQq3R3PR+Kw3iStrSnuD0nPDvTbYsUQx6MmyvTeQ==",
+  "success": true,
+  "projectFilePath": "/home/rodrigobarrera/Desktop/ITAM/Sem_6/Graficas por Computadora/Tareas/Tarea2V2/Tarea2V2.csproj",
+  "expectedPackageFiles": [
+    "/home/rodrigobarrera/.nuget/packages/opentk/4.6.4/opentk.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.compute/4.6.4/opentk.compute.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.core/4.6.4/opentk.core.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.graphics/4.6.4/opentk.graphics.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.input/4.6.4/opentk.input.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.mathematics/4.6.4/opentk.mathematics.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.openal/4.6.4/opentk.openal.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.redist.glfw/3.3.0-pre20200830200122/opentk.redist.glfw.3.3.0-pre20200830200122.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.windowing.common/4.6.4/opentk.windowing.common.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.windowing.desktop/4.6.4/opentk.windowing.desktop.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/opentk.windowing.graphicslibraryframework/4.6.4/opentk.windowing.graphicslibraryframework.4.6.4.nupkg.sha512",
+    "/home/rodrigobarrera/.nuget/packages/system.runtime.compilerservices.unsafe/5.0.0/system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
