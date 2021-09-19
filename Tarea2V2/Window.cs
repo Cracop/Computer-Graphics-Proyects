@@ -2,7 +2,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
-
+//Rodrigo Barrera 181935
 namespace Tarea2V2{
     public class Window : GameWindow {
         float[] _vertices = {
@@ -46,7 +46,7 @@ namespace Tarea2V2{
 
             0.577f,0.1f,0.0f,//28
             0.1981f,0.3951f,0.0f,//29
-            0.2492f, 0.3665f,0.0f,//30
+            0.s2492f, 0.3665f,0.0f,//30
 
             0.2711f,0.4674f,0.0f,//31
             0.378f,0.2316f,0.0f,//32
@@ -90,6 +90,16 @@ namespace Tarea2V2{
 
             -0.027f,0.846f,0.0f,//61
             0.0f,0.946f,0.0f,//62
+            0.3870f,0.7720f,0.0f,//63
+
+            0.4855f,0.7141f,0.0f,//64,
+            0.4818f,0.3844f,0.0f,//65
+            0.785f,0.027f,0.0f,//66
+
+            0.785f,-0.027f,0.0f,//67
+            0.885f,0.0f,0.0f,//68
+
+            
 
 
         };
@@ -119,7 +129,11 @@ namespace Tarea2V2{
             34,40,53,
             35,53,41,
             56,60,61,
-            60,61,62
+            60,61,62,
+            64,57,63,
+            59,66,67,
+            66,67,68
+            
         };  
         //Triangulos Rojos
         uint[] _indices2 = {  // note that we start from 0!

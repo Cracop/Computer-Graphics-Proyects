@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
-
+//Rodrigo Barrera 181935
 namespace Tarea2V2
 {
      public static class Program
@@ -10,7 +10,7 @@ namespace Tarea2V2
             var nativeWindowSettings = new NativeWindowSettings()
             {
                 Size = new Vector2i(800, 600),
-                Title = "LearnOpenTK - Creating a Window",
+                Title = "Rodrigo Barrera - 181935 - Teselaciones Penrose",
             };
 
             // To create a new window, create a class that extends GameWindow, then call Run() on it.
