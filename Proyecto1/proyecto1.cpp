@@ -65,7 +65,27 @@ int main(){
 
         -0.027f,0.1f,0.0f,//1
         0.027f,0.1f,0.0f,//2
-        0.0f,-0.0f,0.0f//3
+        0.1f, 0.1723f,0.0f,//3
+
+        0.07814f, 0.0714f,0.0f,//4
+        0.2f, 0.0f, 0.0f,//5
+        0.1f,-0.027f,0.0f,//6
+
+        0.1f,0.027f,0.0f,//7
+        0.173f,0.1f,0.0f,//8
+        0.0745f, 0.272f,0.0f,//9
+
+        0.2005f,0.195f,0.0f, //10
+        0.273f,0.074f,0.0f,//11
+        0.0f, 0.35f,0.0f,//12
+
+        0.35f,0.0f,0.0f,//13
+        0.175f,0.295f,0.0f,//14
+        0.2973f,0.1739f,0.0f,//15
+
+        0.106f,0.371f,0.0f,//16
+        0.275f,0.27f,0.0f,//17
+        0.3735f,0.104f,0.0f,//18
     };
 
     float verticesProta[] = {
@@ -73,28 +93,66 @@ int main(){
 
         -0.927f,-0.05f,0.0f,//1
         -0.873f,-0.05f,0.0f,//2
-        0.0f,-0.0f,0.0f//3
+        0.9f, 0.5f,0.0f,//3
+
+        0.927f,-0.05f,0.0f,//4
+        0.873f,-0.05f,0.0f,//5
     };
 
+    
 
     //Indices
     // ------------------------------------
-    unsigned int indices1[] = {  // note that we start from 0!
-        0,1,2,
-        //1,2,3
-    };
 
     unsigned int indicesProta[] = {  // note that we start from 0!
         0,1,2,
-        //1,2,3
+        3,4,5
+        
     };
 
+    //Circulo 1
+    unsigned int indices1[] = {  // note that we start from 0!
+        0,1,2,
+        2,3,4,
+        5,6,7,
+        7,8,4,
+    };
+
+    //Circulo 2 parte 1
+    unsigned int indices2[] = {  // note that we start from 0!
+        0,2,3,
+        4,3,8,
+        7,8,5,
+    };
+
+    //Circulo 2 parte 2
+    unsigned int indices3[] = {  // note that we start from 0!
+        0,3,9,
+        3,8,10,
+        5,8,11,
+    };
+
+    //Circulo 3 parte 1
+    unsigned int indices4[] = {  // note that we start from 0!
+        9,3,10,
+        8,10,11,
+        12,9,0, 
+        5,11,13,
+    };
+
+    //Circulo 3 parte 2
+    unsigned int indices5[] = {  // note that we start from 0!
+        14,9,10,
+        10,11,15
+    };
+
+    
     //Creo los VAOs, VBOs y EBOs
     // ------------------------------------
-    unsigned int VBOs[5], VAOs[5], EBOs[5];
-    glGenVertexArrays(5, VAOs);
-    glGenBuffers(5, VBOs);
-    glGenBuffers(5, EBOs);
+    unsigned int VBOs[10], VAOs[10], EBOs[10];
+    glGenVertexArrays(10, VAOs);
+    glGenBuffers(10, VBOs);
+    glGenBuffers(10, EBOs);
 
     //==========Triangulo Prota==================
     // 1. bind Vertex Array Object
@@ -125,12 +183,68 @@ int main(){
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
+    //==========Segundo Circulo pt1==================
+    // 1. bind Vertex Array Object
+    glBindVertexArray(VAOs[2]);
+    // 2. copy our vertices array in a vertex buffer for OpenGL to use
+    glBindBuffer(GL_ARRAY_BUFFER, VBOs[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    // 3. copy our index array in a element buffer for OpenGL to use
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[2]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
+    // 4. then set the vertex attributes pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+
+    //==========Segundo Circulo pt2==================
+    // 1. bind Vertex Array Object
+    glBindVertexArray(VAOs[3]);
+    // 2. copy our vertices array in a vertex buffer for OpenGL to use
+    glBindBuffer(GL_ARRAY_BUFFER, VBOs[3]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    // 3. copy our index array in a element buffer for OpenGL to use
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[3]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices3), indices3, GL_STATIC_DRAW);
+    // 4. then set the vertex attributes pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+
+    //==========Tercer Circulo pt1==================
+    // 1. bind Vertex Array Object
+    glBindVertexArray(VAOs[4]);
+    // 2. copy our vertices array in a vertex buffer for OpenGL to use
+    glBindBuffer(GL_ARRAY_BUFFER, VBOs[4]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    // 3. copy our index array in a element buffer for OpenGL to use
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[4]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices4), indices4, GL_STATIC_DRAW);
+    // 4. then set the vertex attributes pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+
+    //==========Tercer Circulo pt2==================
+    // 1. bind Vertex Array Object
+    glBindVertexArray(VAOs[5]);
+    // 2. copy our vertices array in a vertex buffer for OpenGL to use
+    glBindBuffer(GL_ARRAY_BUFFER, VBOs[5]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    // 3. copy our index array in a element buffer for OpenGL to use
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[5]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices5), indices5, GL_STATIC_DRAW);
+    // 4. then set the vertex attributes pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     auto start = std::chrono::system_clock::now();
     auto end = std::chrono::system_clock::now();
-    int x = 0;
+    int div = 2;
     int fase = 0;
 
     Shader ourShader("shaders/shadertest.vs", "shaders/shadertest.fs"); //Modifico
@@ -142,9 +256,18 @@ int main(){
         std::chrono::duration<double> elapsed_seconds = end-start;
 
         // Indicador de fases
-        if((elapsed_seconds.count()/2)>0.9){
+        if((elapsed_seconds.count()/div)>0.9 && (elapsed_seconds.count()/div)<1.8){
             fase = 1;
+        }else if((elapsed_seconds.count()/div)>1.8 && (elapsed_seconds.count()/div)<2.7){
+            fase = 2;
+        }else if((elapsed_seconds.count()/div)>2.7 && (elapsed_seconds.count()/div)<3.6){
+            fase = 3;   
+        }else if((elapsed_seconds.count()/div)>3.6 && (elapsed_seconds.count()/div)<4.5){
+            fase = 4;   
+        }else if((elapsed_seconds.count()/div)>4.5 && (elapsed_seconds.count()/div)<5.4){
+            fase = 5;   
         }
+        
         // input
         // -----
         processInput(window);
@@ -162,8 +285,9 @@ int main(){
 
         // create transformations
         if(fase==0){
-            transform = glm::translate(transform, glm::vec3(elapsed_seconds.count()/2, elapsed_seconds.count()/2, 0.0f)); // switched the order
-        }else if(fase==1){
+            transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, glm::vec3(elapsed_seconds.count()/div, 0.0f, 0.0f));
+        }else if(fase>0){
             transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order   
         }
         // get matrix's uniform location and set matrix
@@ -177,15 +301,71 @@ int main(){
         // //Primer circulo
         transform = glm::mat4(1.0f);
         if(0<fase){
-            Shader ourShader("shaders/shadertest.vs", "shaders/shadertest.fs"); //Modifico
+            Shader ourShader("shaders/shadertest.vs", "shaders/shaderAmarillo.fs"); //Modifico
             ourShader.use();
-            transform = glm::rotate(transform, (-1)*(float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+            transform = glm::rotate(transform, (-1)*(float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
             // get matrix's uniform location and set matrix
             unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
             glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
             // render container
             glBindVertexArray(VAOs[1]);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+        }
+
+        //Segundo Circulo pt1
+        transform = glm::mat4(1.0f);
+        if(1<fase){
+            Shader ourShader("shaders/shadertest.vs", "shaders/shaderRojo.fs"); //Modifico
+            ourShader.use();
+            transform = glm::rotate(transform, (float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
+            // get matrix's uniform location and set matrix
+            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+            // render container
+            glBindVertexArray(VAOs[2]);
+            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+        }
+
+        //Segundo Circulo pt2
+        transform = glm::mat4(1.0f);
+        if(2<fase){
+            Shader ourShader("shaders/shadertest.vs", "shaders/shaderRojo.fs"); //Modifico
+            ourShader.use();
+            transform = glm::rotate(transform, (-1)*(float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
+            // get matrix's uniform location and set matrix
+            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+            // render container
+            glBindVertexArray(VAOs[3]);
+            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+        }
+
+        //Tercer Circulo pt1
+        transform = glm::mat4(1.0f);
+        if(3<fase){
+            Shader ourShader("shaders/shadertest.vs", "shaders/shaderMoradoClaro.fs"); //Modifico
+            ourShader.use();
+            transform = glm::rotate(transform, (float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
+            // get matrix's uniform location and set matrix
+            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+            // render container
+            glBindVertexArray(VAOs[4]);
+            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+        }
+
+        //Tercer Circulo pt2
+        transform = glm::mat4(1.0f);
+        if(4<fase){
+            Shader ourShader("shaders/shadertest.vs", "shaders/shaderMoradoClaro.fs"); //Modifico
+            ourShader.use();
+            transform = glm::rotate(transform, (-1)*(float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
+            // get matrix's uniform location and set matrix
+            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+            // render container
+            glBindVertexArray(VAOs[5]);
+            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
         }
 
         // //Ejemplo de lo que tengo que hacer
