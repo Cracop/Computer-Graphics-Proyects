@@ -93,13 +93,17 @@ int main(){
 
         -0.927f,-0.05f,0.0f,//1
         -0.873f,-0.05f,0.0f,//2
-        0.9f, 0.5f,0.0f,//3
-
-        0.927f,-0.05f,0.0f,//4
-        0.873f,-0.05f,0.0f,//5
     };
 
-    
+    //Uno en cada cuadrante
+    float verticesProta2[] = {
+        0.9f, 0.05f, 0.0f,//0
+
+        0.927f,-0.05f,0.0f,//1
+        0.873f,-0.05f,0.0f,//2
+    };
+
+    //Los otros tengo que invertir los ejes
 
     //Indices
     // ------------------------------------
@@ -244,7 +248,7 @@ int main(){
 
     auto start = std::chrono::system_clock::now();
     auto end = std::chrono::system_clock::now();
-    int div = 2;
+    int div = 1;
     int fase = 0;
 
     Shader ourShader("shaders/shadertest.vs", "shaders/shadertest.fs"); //Modifico
@@ -287,7 +291,12 @@ int main(){
         if(fase==0){
             transform = glm::mat4(1.0f);
             transform = glm::translate(transform, glm::vec3(elapsed_seconds.count()/div, 0.0f, 0.0f));
-        }else if(fase>0){
+        }else if(fase>0 && 4>fase){
+            transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order  
+             
+        }else if(fase>3){
+            float scaleAmount = -0.1*sin(glfwGetTime());
+            transform = glm::scale(transform, glm::vec3(elapsed_seconds.count()/div, elapsed_seconds.count()/div, scaleAmount));
             transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order   
         }
         // get matrix's uniform location and set matrix
