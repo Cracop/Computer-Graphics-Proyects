@@ -250,6 +250,8 @@ int main(){
     auto end = std::chrono::system_clock::now();
     int div = 1;
     int fase = 0;
+    float inc = 0.01f;
+    float scaleAmount = 1;
 
     Shader ourShader("shaders/shadertest.vs", "shaders/shadertest.fs"); //Modifico
 
@@ -295,8 +297,9 @@ int main(){
             transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order  
              
         }else if(fase>3){
-            float scaleAmount = -0.1*sin(glfwGetTime());
-            transform = glm::scale(transform, glm::vec3(elapsed_seconds.count()/div, elapsed_seconds.count()/div, scaleAmount));
+            //scaleAmount = -0.1*sin(glfwGetTime());
+            scaleAmount = scaleAmount + inc;
+            transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
             transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order   
         }
         // get matrix's uniform location and set matrix
