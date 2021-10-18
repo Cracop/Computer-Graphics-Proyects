@@ -252,8 +252,8 @@ int main(){
     auto end = std::chrono::system_clock::now();
     int div = 1;
     int fase = 0;
-    float inc = 0.01f;
-    float scaleAmount = 1;
+    float inc = 0.005f;
+    float scaleAmount = 1.0f;
 
     //Shaders
     Shader ourShader("shaders/shader.vs", "shaders/shader.fs");
@@ -261,9 +261,13 @@ int main(){
 
     while (!glfwWindowShouldClose(window))
     {
-        std::cout << "Fase: " << fase << "\n";
+       
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = end - start;
+
+        std::cout << "Escala: " << scaleAmount << "\n";
+        std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
+         std::cout << "Fase: " << fase << "\n";
 
         // Indicador de fases
         //Face cero: protagonista camina al centro
@@ -291,14 +295,20 @@ int main(){
         //CIRCULOS   
         ourShader.use();
         glm::mat4 transform = glm::mat4(1.0f);
+        // scaleAmount = 1*sin(glfwGetTime());
+        // scaleAmount = scaleAmount + inc;
+        
+
         if (fase>=1) {
             //Color
             float greenValue = sin(glfwGetTime()) / 2.0f + 0.5f;
+
+            scaleAmount = scaleAmount + (inc*(fase-1));
+            
             ourShader.setVec4("ourColor", 0.87, greenValue, 0.0f, 1.0f);
             //Transformacion
             transform = glm::rotate(transform, (1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f)); //
 
-            scaleAmount = 1*sin(glfwGetTime());
             transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
 
             ourShader.setMat4("transform", transform);
@@ -314,7 +324,6 @@ int main(){
             transform = glm::mat4(1.0f);
             transform = glm::rotate(transform, (1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));
 
-            scaleAmount = 1*sin(glfwGetTime());
             transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
 
             ourShader.setMat4("transform", transform);
@@ -331,9 +340,8 @@ int main(){
             float redValue = sin(glfwGetTime()) / 4.0f + 0.75f;
             ourShader.setVec4("ourColor", redValue, 0.0f, 0.0f, 1.0f);
             //Transformacion
-            transform = glm::rotate(transform, (1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));//
+            transform = glm::rotate(transform, (-1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));//
 
-            scaleAmount = 1*sin(glfwGetTime());
             transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
 
             ourShader.setMat4("transform", transform);
@@ -352,9 +360,8 @@ int main(){
             float blueValue = sin(glfwGetTime()) / 4.0f + 0.75f;
             ourShader.setVec4("ourColor", 0.0f, 0.0f, blueValue, 1.0f);
             //Transformacion
-            transform = glm::rotate(transform, (-1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));
+            transform = glm::rotate(transform, (1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));
 
-            scaleAmount = 1*sin(glfwGetTime());
             transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
             
             ourShader.setMat4("transform", transform);
@@ -371,14 +378,22 @@ int main(){
         //Creo matriz identidad
         transform = glm::mat4(1.0f);
 
-        // Creamos transformaciones dependiendo de la fase
+        // Fase 0:entra
         if (fase == 0) {
             transform = glm::mat4(1.0f);
-            transform = glm::translate(transform, glm::vec3(timeProxy / 5, 0.0f, 0.0f));
+            transform = glm::translate(transform, glm::vec3(timeProxy / 5, 0.1f*sin(glfwGetTime()), 0.0f));
         }
-        else {
-            transform= transform = glm::mat4(1.0f);
-            transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order 
+        else if(fase>=1 && fase<=3) {
+            float salto = abs(sin(glfwGetTime()*4)*0.1);
+            transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, glm::vec3(0.9f, salto, 0.0f)); // switched the order 
+            
+        }
+        else if (fase == 4) {
+            transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, glm::vec3(0.9, 0.0f, 0.0f));
+            std::cout << timeProxy << "\n";
+            transform = glm::translate(transform, glm::vec3(-1*(20-timeProxy) / 5, 0.1f*sin(glfwGetTime()), 0.0f));
         }
 
         shaderTextura.setMat4("transform", transform);
