@@ -1,7 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "shader.h"
+#include "shader_s.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <iostream>
 
@@ -9,6 +11,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
+void reflect(unsigned int vao, int toDraw,Shader ourShader, glm::mat4 transform);
+void fase1(float timeProxy);
 
 //Todo esto es para medir el tiempo
 #include <chrono>
@@ -30,13 +37,13 @@ int main(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    #ifdef __APPLE__
+#ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    #endif
+#endif
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Proyecto 1 Graficas", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -54,103 +61,83 @@ int main(){
         return -1;
     }
 
-    // build and compile our shader program
-    // ------------------------------------
-    // Shader ourShader("shaders/shadertest.vs", "shaders/shadertest.fs"); // you can name your shader files however you like
+    //Vertices de teselacion
+    //Alan llena aqui
+    float verticesTes[] = {
+        0.0f,0.2f,0.0f, //D 0
+        0.025f,0.1f,0.0f, //E 1
+        0.0f,0.1f,0.0f, //J 2
 
-    //Vertices
-    // ------------------------------------
-    float vertices1[] = {
-        0.0f, 0.2f, 0.0f,//0
+        0.095f,0.16f,0.0f, //C 3
+        0.07f,0.068f,0.0f, //F 4
 
-        -0.027f,0.1f,0.0f,//1
-        0.027f,0.1f,0.0f,//2
-        0.1f, 0.1723f,0.0f,//3
+        0.16f,0.1f,0.0f, //H 5
+        0.1,0.025,0.0f, //G 6
 
-        0.07814f, 0.0714f,0.0f,//4
-        0.2f, 0.0f, 0.0f,//5
-        0.1f,-0.027f,0.0f,//6
+        0.2f,0.0f,0.0f, //I 7
+        0.1f,0.0f,0.0f, //K 8
 
-        0.1f,0.027f,0.0f,//7
-        0.173f,0.1f,0.0f,//8
-        0.0745f, 0.272f,0.0f,//9
+        0.07f,0.26f,0.0f, //L 9
+        0.2f,0.2f,0.0f, //M 10
+        0.26f,0.07f,0.0f, //N 11
 
-        0.2005f,0.195f,0.0f, //10
-        0.273f,0.074f,0.0f,//11
-        0.0f, 0.35f,0.0f,//12
+        0.0f,0.33f,0.0f, //O 12
+        0.16f,0.29f,0.0f, //P 13
+        0.29f,0.16f,0.0f, //Q 14
+        0.33f,0.0f,0.0f, //R 15
 
-        0.35f,0.0f,0.0f,//13
-        0.175f,0.295f,0.0f,//14
-        0.2973f,0.1739f,0.0f,//15
+        0.0f,0.0f,0.0f, //Cero 16
 
-        0.106f,0.371f,0.0f,//16
-        0.275f,0.27f,0.0f,//17
-        0.3735f,0.104f,0.0f,//18
+
+    };
+    //vamos de adentro a afuera
+    //centro amarillo
+    unsigned int indicesCentro[] = {
+        2,1,16,
+        1,4,16,
+        4,6,16,
+        6,8,16
+    };
+    //triangulos amarillos primer cuadrante
+    unsigned int indicesI[] = {
+        0,1,2,
+        1,3,4,
+        4,5,6,
+        6,7,8
+    };
+    //triangulos rojos
+    unsigned int indicesR[] = {
+         0,3,1,
+         0,9,3,
+         4,3,5,
+         3,10,5,
+         6,5,7,
+         5,11,7
+    };
+    //triangulos azules claros
+    unsigned int indicesA[] = {
+        0,12,9,
+        3,9,13,
+        3,10,13,
+        5,10,14,
+        5,11,14,
+        11,7,15
     };
 
+ 
+ 
+    //Cuadrado en el centro que crece
     float verticesProta[] = {
-        -0.9f, 0.05f, 0.0f,//0
-
-        -0.927f,-0.05f,0.0f,//1
-        -0.873f,-0.05f,0.0f,//2
+        //positions             //texture
+        -0.9f, 0.05f, 0.0f,     0.5f,1.0f,//1.0f,0.0f, //arriba-medio
+        -0.927f,-0.05f,0.0f,    0.0f,0.0f, //abajo-izquierda
+        -0.873f,-0.05f,0.0f,    1.0f,0.0f//0.5f,1.0f  //abajo-derecha
     };
-
-    //Uno en cada cuadrante
-    float verticesProta2[] = {
-        0.9f, 0.05f, 0.0f,//0
-
-        0.927f,-0.05f,0.0f,//1
-        0.873f,-0.05f,0.0f,//2
-    };
-
-    //Los otros tengo que invertir los ejes
-
-    //Indices
-    // ------------------------------------
-
-    unsigned int indicesProta[] = {  // note that we start from 0!
+    unsigned int indicesProta[] = {
         0,1,2,
-        3,4,5
-        
     };
 
-    //Circulo 1
-    unsigned int indices1[] = {  // note that we start from 0!
-        0,1,2,
-        2,3,4,
-        5,6,7,
-        7,8,4,
-    };
 
-    //Circulo 2 parte 1
-    unsigned int indices2[] = {  // note that we start from 0!
-        0,2,3,
-        4,3,8,
-        7,8,5,
-    };
-
-    //Circulo 2 parte 2
-    unsigned int indices3[] = {  // note that we start from 0!
-        0,3,9,
-        3,8,10,
-        5,8,11,
-    };
-
-    //Circulo 3 parte 1
-    unsigned int indices4[] = {  // note that we start from 0!
-        9,3,10,
-        8,10,11,
-        12,9,0, 
-        5,11,13,
-    };
-
-    //Circulo 3 parte 2
-    unsigned int indices5[] = {  // note that we start from 0!
-        14,9,10,
-        10,11,15
-    };
-
-    
     //Creo los VAOs, VBOs y EBOs
     // ------------------------------------
     unsigned int VBOs[10], VAOs[10], EBOs[10];
@@ -159,6 +146,7 @@ int main(){
     glGenBuffers(10, EBOs);
 
     //==========Triangulo Prota==================
+    //Especial: este va a usar shaders con textura
     // 1. bind Vertex Array Object
     glBindVertexArray(VAOs[0]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
@@ -168,20 +156,24 @@ int main(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[0]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesProta), indicesProta, GL_STATIC_DRAW);
     // 4. then set the vertex attributes pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+    // texture coord attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
 
+    //Para los CIRCULOS 
     //==========Primer Circulo==================
     // 1. bind Vertex Array Object
     glBindVertexArray(VAOs[1]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesI), indicesI, GL_STATIC_DRAW);
     // 4. then set the vertex attributes pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -192,10 +184,10 @@ int main(){
     glBindVertexArray(VAOs[2]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[2]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[2]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesR), indicesR, GL_STATIC_DRAW);
     // 4. then set the vertex attributes pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -206,46 +198,56 @@ int main(){
     glBindVertexArray(VAOs[3]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[3]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices3), indices3, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesA), indicesA, GL_STATIC_DRAW);
     // 4. then set the vertex attributes pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
-    //==========Tercer Circulo pt1==================
+    //==========Centro==================
     // 1. bind Vertex Array Object
     glBindVertexArray(VAOs[4]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[4]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[4]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices4), indices4, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesCentro), indicesCentro, GL_STATIC_DRAW);
     // 4. then set the vertex attributes pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
-    //==========Tercer Circulo pt2==================
-    // 1. bind Vertex Array Object
-    glBindVertexArray(VAOs[5]);
-    // 2. copy our vertices array in a vertex buffer for OpenGL to use
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[5]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
-    // 3. copy our index array in a element buffer for OpenGL to use
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[5]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices5), indices5, GL_STATIC_DRAW);
-    // 4. then set the vertex attributes pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+ 
+    // Cargar textura para PROTA
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+    unsigned char* data = stbi_load("resources/textures/t.jpg", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
+    //Variables para animacion
     auto start = std::chrono::system_clock::now();
     auto end = std::chrono::system_clock::now();
     int div = 1;
@@ -253,148 +255,135 @@ int main(){
     float inc = 0.01f;
     float scaleAmount = 1;
 
-    Shader ourShader("shaders/shadertest.vs", "shaders/shadertest.fs"); //Modifico
+    //Shaders
+    Shader ourShader("shaders/shader.vs", "shaders/shader.fs");
+    Shader shaderTextura("shaders/texture.vs", "shaders/texture.fs");
 
     while (!glfwWindowShouldClose(window))
     {
         std::cout << "Fase: " << fase << "\n";
         auto end = std::chrono::system_clock::now();
-        std::chrono::duration<double> elapsed_seconds = end-start;
+        std::chrono::duration<double> elapsed_seconds = end - start;
 
         // Indicador de fases
-        if((elapsed_seconds.count()/div)>0.9 && (elapsed_seconds.count()/div)<1.8){
-            fase = 1;
-        }else if((elapsed_seconds.count()/div)>1.8 && (elapsed_seconds.count()/div)<2.7){
-            fase = 2;
-        }else if((elapsed_seconds.count()/div)>2.7 && (elapsed_seconds.count()/div)<3.6){
-            fase = 3;   
-        }else if((elapsed_seconds.count()/div)>3.6 && (elapsed_seconds.count()/div)<4.5){
-            fase = 4;   
-        }else if((elapsed_seconds.count()/div)>4.5 && (elapsed_seconds.count()/div)<5.4){
-            fase = 5;   
+        //Face cero: protagonista camina al centro
+        float timeProxy = elapsed_seconds.count() / div;
+        if (timeProxy >= 5.0 && timeProxy <= 10) {
+            fase = 1; //Fade-in de primeras capas de teselacion
         }
-        
-        // input
-        // -----
+        else if (timeProxy >=10 && timeProxy <=15) {
+            fase = 2;  //Fade-in de ultimas caas de teselacioin
+        }
+        else if (timeProxy >=15 && timeProxy <= 20.0) {
+            fase = 3; //Baile
+        }
+        else if (timeProxy >= 20.0 && timeProxy <=25.0) {
+            fase = 4; //Fade out: teselacion se deshace, protagonista regresa
+        }
+
+
         processInput(window);
-        // render
-        // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //Creo matriz identidad
-        glm::mat4 transform = glm::mat4(1.0f);
+        
 
-        //Acciones prota
-        // Shader ourShader("shaders/shadertest.vs", "shaders/shadertest.fs"); //Modifico
+        //CIRCULOS   
         ourShader.use();
+        glm::mat4 transform = glm::mat4(1.0f);
+        if (fase>=1) {
+            //Color
+            float greenValue = sin(glfwGetTime()) / 2.0f + 0.5f;
+            ourShader.setVec4("ourColor", 0.87, greenValue, 0.0f, 1.0f);
+            //Transformacion
+            transform = glm::rotate(transform, (1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f)); //
 
-        // create transformations
-        if(fase==0){
-            transform = glm::mat4(1.0f);
-            transform = glm::translate(transform, glm::vec3(elapsed_seconds.count()/div, 0.0f, 0.0f));
-        }else if(fase>0 && 4>fase){
-            transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order  
-             
-        }else if(fase>3){
-            //scaleAmount = -0.1*sin(glfwGetTime());
-            scaleAmount = scaleAmount + inc;
+            scaleAmount = 1*sin(glfwGetTime());
             transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
-            transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order   
-        }
-        // get matrix's uniform location and set matrix
-        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
-        // render container
-        glBindVertexArray(VAOs[0]);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-
-        // //Primer circulo
-        transform = glm::mat4(1.0f);
-        if(0<fase){
-            Shader ourShader("shaders/shadertest.vs", "shaders/shaderAmarillo.fs"); //Modifico
-            ourShader.use();
-            transform = glm::rotate(transform, (-1)*(float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
-            // get matrix's uniform location and set matrix
-            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+            ourShader.setMat4("transform", transform);
             // render container
             glBindVertexArray(VAOs[1]);
             glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+            //reflect
+            reflect(VAOs[1], 12, ourShader,transform);
+
+            //Color
+            ourShader.setVec4("ourColor", 0.87, greenValue, 0.0f, 1.0f);
+            //Transformacion
+            transform = glm::mat4(1.0f);
+            transform = glm::rotate(transform, (1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));
+
+            scaleAmount = 1*sin(glfwGetTime());
+            transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+
+            ourShader.setMat4("transform", transform);
+            // render container
+            glBindVertexArray(VAOs[4]);
+            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+            reflect(VAOs[4], 12, ourShader,transform);
         }
 
         //Segundo Circulo pt1
         transform = glm::mat4(1.0f);
-        if(1<fase){
-            Shader ourShader("shaders/shadertest.vs", "shaders/shaderRojo.fs"); //Modifico
-            ourShader.use();
-            transform = glm::rotate(transform, (float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
-            // get matrix's uniform location and set matrix
-            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        if (fase>=2) {       
+            //Color
+            float redValue = sin(glfwGetTime()) / 4.0f + 0.75f;
+            ourShader.setVec4("ourColor", redValue, 0.0f, 0.0f, 1.0f);
+            //Transformacion
+            transform = glm::rotate(transform, (1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));//
+
+            scaleAmount = 1*sin(glfwGetTime());
+            transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+
+            ourShader.setMat4("transform", transform);
             // render container
             glBindVertexArray(VAOs[2]);
-            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+
+            reflect(VAOs[2], 18, ourShader, transform);
+            
         }
 
         //Segundo Circulo pt2
         transform = glm::mat4(1.0f);
-        if(2<fase){
-            Shader ourShader("shaders/shadertest.vs", "shaders/shaderRojo.fs"); //Modifico
-            ourShader.use();
-            transform = glm::rotate(transform, (-1)*(float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
-            // get matrix's uniform location and set matrix
-            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        if (fase>=3) {
+            //Color
+            float blueValue = sin(glfwGetTime()) / 4.0f + 0.75f;
+            ourShader.setVec4("ourColor", 0.0f, 0.0f, blueValue, 1.0f);
+            //Transformacion
+            transform = glm::rotate(transform, (-1) * (float)glfwGetTime() / div, glm::vec3(0.0f, 0.0f, 1.0f));
+
+            scaleAmount = 1*sin(glfwGetTime());
+            transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+            
+            ourShader.setMat4("transform", transform);
             // render container
             glBindVertexArray(VAOs[3]);
-            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+            reflect(VAOs[3], 18, ourShader, transform);
         }
-
-        //Tercer Circulo pt1
+        //PROTA
+        //Textura
+       
+        glBindTexture(GL_TEXTURE_2D, texture);
+        shaderTextura.use();
+        //Creo matriz identidad
         transform = glm::mat4(1.0f);
-        if(3<fase){
-            Shader ourShader("shaders/shadertest.vs", "shaders/shaderMoradoClaro.fs"); //Modifico
-            ourShader.use();
-            transform = glm::rotate(transform, (float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
-            // get matrix's uniform location and set matrix
-            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-            // render container
-            glBindVertexArray(VAOs[4]);
-            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+        // Creamos transformaciones dependiendo de la fase
+        if (fase == 0) {
+            transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, glm::vec3(timeProxy / 5, 0.0f, 0.0f));
+        }
+        else {
+            transform= transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, glm::vec3(0.9, -0.0f, 0.0f)); // switched the order 
         }
 
-        //Tercer Circulo pt2
-        transform = glm::mat4(1.0f);
-        if(4<fase){
-            Shader ourShader("shaders/shadertest.vs", "shaders/shaderMoradoClaro.fs"); //Modifico
-            ourShader.use();
-            transform = glm::rotate(transform, (-1)*(float)glfwGetTime()/div, glm::vec3(0.0f, 0.0f, 1.0f));
-            // get matrix's uniform location and set matrix
-            unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-            // render container
-            glBindVertexArray(VAOs[5]);
-            glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-        }
-
-        // //Ejemplo de lo que tengo que hacer
-        // // get matrix's uniform location and set matrix
-        // ourShader.use();
-        // // create transformations
-        // glm::mat4 transform = glm::mat4(1.0f);
-        // //transform = glm::rotate(transform, (-1)*(float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f)); // switched the order
-        // transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f)); // switched the order 
-
-        // // get matrix's uniform location and set matrix
-        // unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        // glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
-        // // render container
-        // glBindVertexArray(VAO);
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        shaderTextura.setMat4("transform", transform);
+        glBindVertexArray(VAOs[0]);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -402,11 +391,7 @@ int main(){
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        // auto end = std::chrono::system_clock::now();
-        // std::chrono::duration<double> elapsed_seconds = end-start;
 
-        // std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
-    
     }
 
     // optional: de-allocate all resources once they've outlived their purpose:
@@ -418,6 +403,26 @@ int main(){
     // ------------------------------------------------------------------
     glfwTerminate();
     return 0;
+}
+
+//Refleja a todos los cuadrantes
+void reflect(unsigned int vao, int toDraw,Shader ourShader, glm::mat4 transform) {
+    //glm::mat4 transform = glm::mat4(1.0f);
+    //Transformacion (reflexion x)
+    transform = glm::scale(transform, glm::vec3(1, -1, 1));
+    ourShader.setMat4("transform", transform);
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, toDraw, GL_UNSIGNED_INT, 0);
+    //Transformacion (reflexion y)
+    transform = glm::scale(transform, glm::vec3(-1, 1, 1));
+    ourShader.setMat4("transform", transform);
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, toDraw, GL_UNSIGNED_INT, 0);
+    //Transformacion (reflexion x)
+    transform = glm::scale(transform, glm::vec3(1, -1, 1));
+    ourShader.setMat4("transform", transform);
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, toDraw, GL_UNSIGNED_INT, 0);
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
