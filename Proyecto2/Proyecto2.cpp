@@ -116,35 +116,87 @@ int main()
 //vamos de adentro a afuera
     //centro amarillo
     unsigned int indicesCentro[] = {
-        2,1,16,
-        1,4,16,
-        4,6,16,
-        6,8,16
+        1,0,5,
+        0,2,5,
+        2,3,5,
+        3,4,5
     };
-    //triangulos amarillos primer cuadrante
+    
+    float verticesCentro[] = {
+        0.025f,0.1f,0.0f, //E 1 0
+        0.0f,0.1f,0.0f, //J 2 1
+        0.07f,0.068f,0.0f, //F 4 2
+        0.1,0.025,0.0f, //G 6 3 
+        0.1f,0.0f,0.0f, //K 8 4
+        0.0f,0.0f,0.0f, //Cero 16 5
+    };
+    
+    //triangulos amarillos primer cuadrante 
     unsigned int indicesI[] = {
         0,1,2,
         1,3,4,
         4,5,6,
         6,7,8
     };
+
+    float verticesI[] = {
+        0.0f,0.2f,0.0f, //D 0 
+        0.025f,0.1f,0.0f, //E 1  
+        0.0f,0.1f,0.0f, //J 2 
+        0.095f,0.16f,0.0f, //C 3  
+        0.07f,0.068f,0.0f, //F 4
+        0.16f,0.1f,0.0f, //H 5
+        0.1,0.025,0.0f, //G 6 
+        0.2f,0.0f,0.0f, //I 7 
+        0.1f,0.0f,0.0f, //K 8
+    };
+
     //triangulos rojos
     unsigned int indicesR[] = {
-         0,3,1,
-         0,9,3,
-         4,3,5,
-         3,10,5,
-         6,5,7,
-         5,11,7
+         0,2,1,
+         0,7,2,
+         3,2,4,
+         2,8,4,
+         5,4,6,
+         4,9,6
     };
+
+    float verticesR[] = {
+        0.0f,0.2f,0.0f, //D 0 0
+        0.025f,0.1f,0.0f, //E 1 1 
+        0.095f,0.16f,0.0f, //C 3 2
+        0.07f,0.068f,0.0f, //F 4 3 
+        0.16f,0.1f,0.0f, //H 5 4
+        0.1,0.025,0.0f, //G 6 5 
+        0.2f,0.0f,0.0f, //I 7 6
+        0.07f,0.26f,0.0f, //L 9 7
+        0.2f,0.2f,0.0f, //M 10 8  
+        0.26f,0.07f,0.0f, //N 11 9
+
+    };
+        
     //triangulos azules claros
     unsigned int indicesA[] = {
-        0,12,9,
-        3,9,13,
-        3,10,13,
-        5,10,14,
-        5,11,14,
-        11,7,15
+        0,7,4,
+        1,4,8,
+        1,5,8,
+        2,5,9,
+        2,6,9,
+        6,3,10
+    };
+
+    float verticesA[] = {
+        0.0f,0.2f,0.0f, //D 0 0
+        0.095f,0.16f,0.0f, //C 3 1
+        0.16f,0.1f,0.0f, //H 5 2
+        0.2f,0.0f,0.0f, //I 7 3 
+        0.07f,0.26f,0.0f, //L 9 4
+        0.2f,0.2f,0.0f, //M 10 5
+        0.26f,0.07f,0.0f, //N 11 6 
+        0.0f,0.33f,0.0f, //O 12 7 
+        0.16f,0.29f,0.0f, //P 13 8
+        0.29f,0.16f,0.0f, //Q 14 9 
+        0.33f,0.0f,0.0f, //R 15 10
     };
 
 
@@ -161,7 +213,7 @@ int main()
     glBindVertexArray(VAOs[1]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesI), verticesI, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesI), indicesI, GL_STATIC_DRAW);
@@ -175,7 +227,7 @@ int main()
     glBindVertexArray(VAOs[2]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[2]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesR), verticesR, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[2]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesR), indicesR, GL_STATIC_DRAW);
@@ -189,7 +241,7 @@ int main()
     glBindVertexArray(VAOs[3]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[3]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesA), verticesA, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[3]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesA), indicesA, GL_STATIC_DRAW);
@@ -203,7 +255,7 @@ int main()
     glBindVertexArray(VAOs[4]);
     // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[4]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesTes), verticesTes, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesCentro), verticesCentro, GL_STATIC_DRAW);
     // 3. copy our index array in a element buffer for OpenGL to use
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[4]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesCentro), indicesCentro, GL_STATIC_DRAW);
