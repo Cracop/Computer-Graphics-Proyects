@@ -12,7 +12,7 @@
 
 #include "clases/shader.h"
 // Cambiar entre "camera.h" y "cameraFPS.h"
-#include "clases/camera.h"
+#include "clases/cameraFPS.h"
 
 #include <iostream>
 
@@ -28,7 +28,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -123,12 +123,12 @@ int main()
     };
     
     float verticesCentro[] = {
-        0.025f,0.1f,0.0f, //E 1 0
-        0.0f,0.1f,0.0f, //J 2 1
-        0.07f,0.068f,0.0f, //F 4 2
-        0.1,0.025,0.0f, //G 6 3 
-        0.1f,0.0f,0.0f, //K 8 4
-        0.0f,0.0f,0.0f, //Cero 16 5
+        0.025f,0.1f,-0.5f, //E 1 0
+        0.0f,0.1f,-0.5f, //J 2 1
+        0.07f,0.068f,-0.5f, //F 4 2
+        0.1,0.025,-0.5f, //G 6 3 
+        0.1f,0.0f,-0.5f, //K 8 4
+        0.0f,0.0f,-0.5f, //Cero 16 5
     };
     
     //triangulos amarillos primer cuadrante 
@@ -140,15 +140,15 @@ int main()
     };
 
     float verticesI[] = {
-        0.0f,0.2f,0.0f, //D 0 
-        0.025f,0.1f,0.0f, //E 1  
-        0.0f,0.1f,0.0f, //J 2 
-        0.095f,0.16f,0.0f, //C 3  
-        0.07f,0.068f,0.0f, //F 4
-        0.16f,0.1f,0.0f, //H 5
-        0.1,0.025,0.0f, //G 6 
-        0.2f,0.0f,0.0f, //I 7 
-        0.1f,0.0f,0.0f, //K 8
+        0.0f,0.2f,-0.25f, //D 0 
+        0.025f,0.1f,-0.25f, //E 1  
+        0.0f,0.1f,-0.25f, //J 2 
+        0.095f,0.16f,-0.25f, //C 3  
+        0.07f,0.068f,-0.25f, //F 4
+        0.16f,0.1f,-0.25f, //H 5
+        0.1,0.025,-0.25f, //G 6 
+        0.2f,0.0f,-0.25f, //I 7 
+        0.1f,0.0f,-0.25f, //K 8
     };
 
     //triangulos rojos
@@ -162,16 +162,16 @@ int main()
     };
 
     float verticesR[] = {
-        0.0f,0.2f,0.0f, //D 0 0
-        0.025f,0.1f,0.0f, //E 1 1 
-        0.095f,0.16f,0.0f, //C 3 2
-        0.07f,0.068f,0.0f, //F 4 3 
-        0.16f,0.1f,0.0f, //H 5 4
-        0.1,0.025,0.0f, //G 6 5 
-        0.2f,0.0f,0.0f, //I 7 6
-        0.07f,0.26f,0.0f, //L 9 7
-        0.2f,0.2f,0.0f, //M 10 8  
-        0.26f,0.07f,0.0f, //N 11 9
+        0.0f,0.2f,0.25f, //D 0 0
+        0.025f,0.1f,0.25f, //E 1 1 
+        0.095f,0.16f,0.25f, //C 3 2
+        0.07f,0.068f,0.25f, //F 4 3 
+        0.16f,0.1f,0.25f, //H 5 4
+        0.1,0.025,0.25f, //G 6 5 
+        0.2f,0.0f,0.25f, //I 7 6
+        0.07f,0.26f,0.25f, //L 9 7
+        0.2f,0.2f,0.25f, //M 10 8  
+        0.26f,0.07f,0.25f, //N 11 9
 
     };
         
