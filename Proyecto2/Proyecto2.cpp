@@ -155,7 +155,7 @@ int main()
     };
     
     //triangulos amarillos primer cuadrante 
-    unsigned int indicesI[] = {
+    unsigned int indicesI[] = {  
         0,1,2,
         1,3,4,
         4,5,6,
@@ -215,19 +215,46 @@ int main()
 
     //triangulos rojos
     unsigned int indicesR[] = {
-         0,2,1,
-         0,7,2,
-         3,2,4,
-         2,8,4,
-         5,4,6,
-         4,9,6,
+        //  0,2,1,
+        //  0,7,2,
+        //  3,2,4,
+        //  2,8,4,
+        //  5,4,6,
+        //  4,9,6,
 
-         10,12,11,
-         10,17,12,
-         13,12,14,
-         12,18,14,
-         15,14,16,
-         14,19,16,
+        //  10,12,11,
+        //  10,17,12,
+        //  13,12,14,
+        //  12,18,14,
+        //  15,14,16,
+        //  14,19,16,
+
+         0,1,11,
+         11,10,0,
+         1,2,11,
+         11,12,2,
+         2,3,13,
+         13,12,2,
+         3,4,14,
+         14,13,3,
+         4,5,15,
+         15,14,4,
+         5,6,16,
+         16,15,5,
+         6,9,19,
+         19,16,6,
+         9,4,14,
+         14,19,9,
+         4,8,18,
+         18,14,4,
+         8,2,12,
+         12,18,8,
+         2,7,17,
+         17,12,2,
+         7,0,10,
+         10,17,7
+
+        //  Checar bien esto cuando tenga luz para ver que onda
     };
 
     float verticesR[] = {
@@ -257,19 +284,47 @@ int main()
         
     //triangulos azules 
     unsigned int indicesA[] = {
-        0,7,4,
-        1,4,8,
-        1,5,8,
-        2,5,9,
-        2,6,9,
-        6,3,10,
+        // 0,7,4,
+        // 1,4,8,
+        // 1,5,8,
+        // 2,5,9,
+        // 2,6,9,
+        // 6,3,10,
 
-        11,18,15,
-        12,15,19,
-        12,16,19,
-        13,16,20,
-        13,17,20,
-        17,14,21,
+        // 11,18,15,
+        // 12,15,19,
+        // 12,16,19,
+        // 13,16,20,
+        // 13,17,20,
+        // 17,14,21,
+
+        0,4,15,
+        15,11,0,
+        4,1,12,
+        12,15,4,
+        1,5,16,
+        16,12,1,
+        5,2,13,
+        13,16,5,
+        2,6,17,
+        17,13,2,
+        6,3,14,
+        14,17,6,
+        10,6,17,
+        17,21,10,
+        6,9,20,
+        20,17,6,
+        9,5,16,
+        16,20,9,
+        5,8,19,
+        19,16,5,
+        8,4,15,
+        15,19,8,
+        4,7,18,
+        18,15,4
+
+        // Yep, necesito iluminación para distinguir
+        
     };
 
     float verticesA[] = {
@@ -411,7 +466,7 @@ int main()
         ourShader.setVec4("ourColor", 1.0f, 0.0f, 0.0f, 1.0f);
         glBindVertexArray(VAOs[2]);
         glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
-        reflect(VAOs[2], 72, ourShader, transform);
+        reflect(VAOs[2], 120, ourShader, transform);
         
         //=========Segundo Circulo pt2==============
         transform = glm::mat4(1.0f);
@@ -419,7 +474,7 @@ int main()
         ourShader.setVec4("ourColor", 0.0980f, 0.0980f, 0.439f, 1.0f);
         glBindVertexArray(VAOs[3]);
         glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
-        reflect(VAOs[3], 72, ourShader, transform);
+        reflect(VAOs[3], 120, ourShader, transform);
 
         //================Centro====================
         transform = glm::mat4(1.0f);
