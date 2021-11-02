@@ -12,7 +12,7 @@
 
 #include "clases/shader.h"
 // Cambiar entre "camera.h" y "cameraFPS.h"
-#include "clases/cameraFPS.h"
+#include "clases/camera.h"
 
 #include <iostream>
 
@@ -114,12 +114,28 @@ int main()
     };
 
 //vamos de adentro a afuera
+// Los el índice que me importa es el segundo num i.e. E 1 0 el indice es 0
     //centro amarillo
     unsigned int indicesCentro[] = {
         1,0,5,
         0,2,5,
         2,3,5,
-        3,4,5
+        3,4,5,
+
+        7,6,11,
+        6,8,11,
+        8,9,11,
+        9,10,11,
+
+        0,1,6,
+        6,7,1,
+        0,2,6,
+        6,8,2,
+        2,3,8,
+        8,9,3,
+        3,4,9,
+        9,10,4,
+
     };
     
     float verticesCentro[] = {
@@ -129,6 +145,13 @@ int main()
         0.1,0.025,-0.5f, //G 6 3 
         0.1f,0.0f,-0.5f, //K 8 4
         0.0f,0.0f,-0.5f, //Cero 16 5
+
+        0.025f,0.1f,-0.4f, //E 1 6
+        0.0f,0.1f,-0.4f, //J 2 7
+        0.07f,0.068f,-0.4f, //F 4 8
+        0.1,0.025,-0.4f, //G 6 9
+        0.1f,0.0f,-0.4f, //K 8 10
+        0.0f,0.0f,-0.4f, //Cero 16 11
     };
     
     //triangulos amarillos primer cuadrante 
@@ -136,7 +159,36 @@ int main()
         0,1,2,
         1,3,4,
         4,5,6,
-        6,7,8
+        6,7,8,
+
+        9,10,11,
+        10,12,13,
+        13,14,15,
+        15,16,17,
+
+        0,2,11,
+        11,9,0,
+        0,1,10,
+        9,10,0,
+        1,3,12,
+        12,10,1,
+        3,4,13,
+        13,12,3,
+        4,5,14,
+        14,13,4,
+        6,5,14,
+        14,15,6,
+        6,7,16,
+        16,15,6,
+        2,1,10,
+        10,11,2,
+        1,4,13,
+        13,10,1,
+        4,6,15,
+        15,3,4,
+        6,8,17,
+        17,15,6
+        
     };
 
     float verticesI[] = {
@@ -149,6 +201,16 @@ int main()
         0.1,0.025,-0.25f, //G 6 
         0.2f,0.0f,-0.25f, //I 7 
         0.1f,0.0f,-0.25f, //K 8
+
+        0.0f,0.2f,-0.15f, //D 9 
+        0.025f,0.1f,-0.15f, //E 10  
+        0.0f,0.1f,-0.15f, //J 11 
+        0.095f,0.16f,-0.15f, //C 12  
+        0.07f,0.068f,-0.15f, //F 13
+        0.16f,0.1f,-0.15f, //H 14
+        0.1,0.025,-0.15f, //G 15 
+        0.2f,0.0f,-0.15f, //I 16 
+        0.1f,0.0f,-0.15f, //K 17
     };
 
     //triangulos rojos
@@ -158,7 +220,14 @@ int main()
          3,2,4,
          2,8,4,
          5,4,6,
-         4,9,6
+         4,9,6,
+
+         10,12,11,
+         10,17,12,
+         13,12,14,
+         12,18,14,
+         15,14,16,
+         14,19,16,
     };
 
     float verticesR[] = {
@@ -173,16 +242,34 @@ int main()
         0.2f,0.2f,0.25f, //M 10 8  
         0.26f,0.07f,0.25f, //N 11 9
 
+        0.0f,0.2f,0.35f, //D 0 10
+        0.025f,0.1f,0.35f, //E 1 11 
+        0.095f,0.16f,0.35f, //C 3 12
+        0.07f,0.068f,0.35f, //F 4 13 
+        0.16f,0.1f,0.35f, //H 5 14
+        0.1,0.025,0.35f, //G 6 15 
+        0.2f,0.0f,0.35f, //I 7 16
+        0.07f,0.26f,0.35f, //L 9 17
+        0.2f,0.2f,0.35f, //M 10 18  
+        0.26f,0.07f,0.35f, //N 11 19
+
     };
         
-    //triangulos azules claros
+    //triangulos azules 
     unsigned int indicesA[] = {
         0,7,4,
         1,4,8,
         1,5,8,
         2,5,9,
         2,6,9,
-        6,3,10
+        6,3,10,
+
+        11,18,15,
+        12,15,19,
+        12,16,19,
+        13,16,20,
+        13,17,20,
+        17,14,21,
     };
 
     float verticesA[] = {
@@ -197,6 +284,18 @@ int main()
         0.16f,0.29f,0.0f, //P 13 8
         0.29f,0.16f,0.0f, //Q 14 9 
         0.33f,0.0f,0.0f, //R 15 10
+
+        0.0f,0.2f,0.1f, //D 0 11
+        0.095f,0.16f,0.1f, //C 3 12
+        0.16f,0.1f,0.1f, //H 5 13
+        0.2f,0.0f,0.1f, //I 7 14 
+        0.07f,0.26f,0.1f, //L 9 15
+        0.2f,0.2f,0.1f, //M 10 16
+        0.26f,0.07f,0.1f, //N 11 17 
+        0.0f,0.33f,0.1f, //O 12 18 
+        0.16f,0.29f,0.1f, //P 13 19
+        0.29f,0.16f,0.1f, //Q 14 20 
+        0.33f,0.0f,0.1f, //R 15 21
     };
 
 
@@ -303,32 +402,32 @@ int main()
         ourShader.setMat4("transform", transform);
         ourShader.setVec4("ourColor", 0.87f, 0.734f, 0.082f, 1.0f);
         glBindVertexArray(VAOs[1]);
-        glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-        reflect(VAOs[1], 12, ourShader,transform);
+        glDrawElements(GL_TRIANGLES, 90, GL_UNSIGNED_INT, 0);
+        reflect(VAOs[1], 90, ourShader,transform);
 
         //========Segundo Circulo pt1===============
         transform = glm::mat4(1.0f);
         ourShader.setMat4("transform", transform);
         ourShader.setVec4("ourColor", 1.0f, 0.0f, 0.0f, 1.0f);
         glBindVertexArray(VAOs[2]);
-        glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
-        reflect(VAOs[2], 18, ourShader, transform);
+        glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+        reflect(VAOs[2], 72, ourShader, transform);
         
         //=========Segundo Circulo pt2==============
         transform = glm::mat4(1.0f);
         ourShader.setMat4("transform", transform);
         ourShader.setVec4("ourColor", 0.0980f, 0.0980f, 0.439f, 1.0f);
         glBindVertexArray(VAOs[3]);
-        glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
-        reflect(VAOs[3], 18, ourShader, transform);
+        glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+        reflect(VAOs[3], 72, ourShader, transform);
 
         //================Centro====================
         transform = glm::mat4(1.0f);
         ourShader.setMat4("transform", transform);
         ourShader.setVec4("ourColor", 0.87f, 0.734f, 0.082f, 1.0f);
         glBindVertexArray(VAOs[4]);
-        glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-        reflect(VAOs[4], 12, ourShader,transform);
+        glDrawElements(GL_TRIANGLES, 48, GL_UNSIGNED_INT, 0);
+        reflect(VAOs[4], 48, ourShader,transform);
         
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
