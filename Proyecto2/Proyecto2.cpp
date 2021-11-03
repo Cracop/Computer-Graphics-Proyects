@@ -12,10 +12,14 @@
 
 #include "clases/shader.h"
 // Cambiar entre "camera.h" y "cameraFPS.h"
-#include "clases/camera.h"
+#include "clases/cameraFPS.h"
 
 #include <iostream>
 
+// TODO:
+// 1. calcular los vectores normales a los vertices (voy a tener que repetir vertices porque les toca diferentes normales).
+// 2. agregar/modificar los indices para que los triangulos estén hechos counterclockwise.
+// 3. modificar los shaders para que funcione la iluminación. 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -87,34 +91,10 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
   
-    float verticesTes[] = {
-        0.0f,0.2f,0.0f, //D 0
-        0.025f,0.1f,0.0f, //E 1
-        0.0f,0.1f,0.0f, //J 2
-
-        0.095f,0.16f,0.0f, //C 3
-        0.07f,0.068f,0.0f, //F 4
-
-        0.16f,0.1f,0.0f, //H 5
-        0.1,0.025,0.0f, //G 6
-
-        0.2f,0.0f,0.0f, //I 7
-        0.1f,0.0f,0.0f, //K 8
-
-        0.07f,0.26f,0.0f, //L 9
-        0.2f,0.2f,0.0f, //M 10
-        0.26f,0.07f,0.0f, //N 11
-
-        0.0f,0.33f,0.0f, //O 12
-        0.16f,0.29f,0.0f, //P 13
-        0.29f,0.16f,0.0f, //Q 14
-        0.33f,0.0f,0.0f, //R 15
-
-        0.0f,0.0f,0.0f, //Cero 16
-    };
-
 //vamos de adentro a afuera
 // Los el índice que me importa es el segundo num i.e. E 1 0 el indice es 0
+
+// Ok tengo 
     //centro amarillo
     unsigned int indicesCentro[] = {
         1,0,5,
@@ -215,19 +195,19 @@ int main()
 
     //triangulos rojos
     unsigned int indicesR[] = {
-        //  0,2,1,
-        //  0,7,2,
-        //  3,2,4,
-        //  2,8,4,
-        //  5,4,6,
-        //  4,9,6,
+         0,2,1,
+         0,7,2,
+         3,2,4,
+         2,8,4,
+         5,4,6,
+         4,9,6,
 
-        //  10,12,11,
-        //  10,17,12,
-        //  13,12,14,
-        //  12,18,14,
-        //  15,14,16,
-        //  14,19,16,
+         10,12,11,
+         10,17,12,
+         13,12,14,
+         12,18,14,
+         15,14,16,
+         14,19,16,
 
          0,1,11,
          11,10,0,
@@ -284,19 +264,19 @@ int main()
         
     //triangulos azules 
     unsigned int indicesA[] = {
-        // 0,7,4,
-        // 1,4,8,
-        // 1,5,8,
-        // 2,5,9,
-        // 2,6,9,
-        // 6,3,10,
+        0,7,4,
+        1,4,8,
+        1,5,8,
+        2,5,9,
+        2,6,9,
+        6,3,10,
 
-        // 11,18,15,
-        // 12,15,19,
-        // 12,16,19,
-        // 13,16,20,
-        // 13,17,20,
-        // 17,14,21,
+        11,18,15,
+        12,15,19,
+        12,16,19,
+        13,16,20,
+        13,17,20,
+        17,14,21,
 
         0,4,15,
         15,11,0,
@@ -458,14 +438,14 @@ int main()
         ourShader.setVec4("ourColor", 0.87f, 0.734f, 0.082f, 1.0f);
         glBindVertexArray(VAOs[1]);
         glDrawElements(GL_TRIANGLES, 90, GL_UNSIGNED_INT, 0);
-        reflect(VAOs[1], 90, ourShader,transform);
+        reflect(VAOs[1], 100, ourShader,transform);
 
         //========Segundo Circulo pt1===============
         transform = glm::mat4(1.0f);
         ourShader.setMat4("transform", transform);
         ourShader.setVec4("ourColor", 1.0f, 0.0f, 0.0f, 1.0f);
         glBindVertexArray(VAOs[2]);
-        glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 120, GL_UNSIGNED_INT, 0);
         reflect(VAOs[2], 120, ourShader, transform);
         
         //=========Segundo Circulo pt2==============
@@ -473,7 +453,7 @@ int main()
         ourShader.setMat4("transform", transform);
         ourShader.setVec4("ourColor", 0.0980f, 0.0980f, 0.439f, 1.0f);
         glBindVertexArray(VAOs[3]);
-        glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 120, GL_UNSIGNED_INT, 0);
         reflect(VAOs[3], 120, ourShader, transform);
 
         //================Centro====================
