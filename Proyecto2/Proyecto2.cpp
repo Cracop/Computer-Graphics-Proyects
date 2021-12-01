@@ -12,7 +12,7 @@
 
 #include "clases/shader.h"
 // Cambiar entre "camera.h" y "cameraFPS.h"
-#include "clases/cameraFPS.h"
+#include "clases/camera.h"
 
 #include <iostream>
 
