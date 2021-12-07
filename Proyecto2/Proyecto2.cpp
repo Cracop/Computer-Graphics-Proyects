@@ -211,34 +211,88 @@ int main()
 
     // Falta acomodar eso
      float verticesR[] = {
-        0.0f,0.2f,0.25f, //D 0 0
-        0.025f,0.1f,0.25f, //E 1 1 
-        0.095f,0.16f,0.25f, //C 3 2
-        0.07f,0.068f,0.25f, //F 4 3 
-        0.16f,0.1f,0.25f, //H 5 4
-        0.1,0.025,0.25f, //G 6 5 
-        0.2f,0.0f,0.25f, //I 7 6
-        0.07f,0.26f,0.25f, //L 9 7
-        0.2f,0.2f,0.25f, //M 10 8  
-        0.26f,0.07f,0.25f, //N 11 9
+
+        // Cara Enfrente
+        0.0f,0.2f,0.4f, 0.0f, 0.0f, 1.0f,//D
+        0.07f,0.26f,0.4f, 0.0f, 0.0f, 1.0f,//L
+        0.095f,0.16f,0.4f, 0.0f, 0.0f, 1.0f,//C
+
+        0.095f,0.16f,0.4f, 0.0f, 0.0f, 1.0f,//C
+        0.2f,0.2f,0.4f, 0.0f, 0.0f, 1.0f,//M
+        0.16f,0.1f,0.4f, 0.0f, 0.0f, 1.0f,//H
+
+        0.16f,0.1f,0.4f, 0.0f, 0.0f, 1.0f,//H
+        0.26f,0.07f,0.4f, 0.0f, 0.0f, 1.0f,//N
+        0.2f,0.0f,0.4f, 0.0f, 0.0f, 1.0f,//I
+
+        0.0f,0.2f,0.4f, 0.0f, 0.0f, 1.0f,//D
+        0.095f,0.16f,0.4f, 0.0f, 0.0f, 1.0f,//C
+        0.025f,0.1f,0.4f, 0.0f, 0.0f, 1.0f, //E 
+
+        0.07f,0.068f,0.4f, 0.0f, 0.0f, 1.0f,//F
+        0.095f,0.16f,0.4f, 0.0f, 0.0f, 1.0f,//C
+        0.16f,0.1f,0.4f, 0.0f, 0.0f, 1.0f,//H 
+
+        0.1,0.025,0.4f, 0.0f, 0.0f, 1.0f,//G
+        0.16f,0.1f,0.4f, 0.0f, 0.0f, 1.0f,//H
+        0.2f,0.0f,0.4f, 0.0f, 0.0f, 1.0f,//I 
+
+
+        // Cara Detrás
+        0.0f,0.2f,0.3f, 0.0f, 0.0f, -1.0f,//D'
+        0.07f,0.26f,0.3f, 0.0f, 0.0f, -1.0f,//L'
+        0.095f,0.16f,0.3f, 0.0f, 0.0f, -1.0f,//C'
+
+        0.095f,0.16f,0.3f, 0.0f, 0.0f, -1.0f,//C'
+        0.2f,0.2f,0.3f, 0.0f, 0.0f, -1.0f,//M'
+        0.16f,0.1f,0.3f, 0.0f, 0.0f, -1.0f,//H'
+
+        0.16f,0.1f,0.3f, 0.0f, 0.0f, -1.0f,//H'
+        0.26f,0.07f,0.3f, 0.0f, 0.0f, -1.0f,//N'
+        0.2f,0.0f,0.3f, 0.0f, 0.0f, -1.0f,//I'
+
+        0.0f,0.2f,0.3f, 0.0f, 0.0f, -1.0f,//D'
+        0.095f,0.16f,0.3f, 0.0f, 0.0f, -1.0f,//C'
+        0.025f,0.1f,0.3f, 0.0f, 0.0f, -1.0f, //E'
+
+        0.07f,0.068f,0.3f, 0.0f, 0.0f, -1.0f,//F'
+        0.095f,0.16f,0.3f, 0.0f, 0.0f, -1.0f,//C'
+        0.16f,0.1f,0.3f, 0.0f, 0.0f, -1.0f,//H'
+
+        0.1,0.025,0.3f, 0.0f, 0.0f, -1.0f,//G'
+        0.16f,0.1f,0.3f, 0.0f, 0.0f, -1.0f,//H'
+        0.2f,0.0f,0.3f, 0.0f, 0.0f, -1.0f,//I' 
+
     };
     
     // first, configure the cube's VAO (and VBO)
     unsigned int VBOs[10], VAOs[10];
-    glGenVertexArrays(1, VAOs);
-    glGenBuffers(1, VBOs);
+    glGenVertexArrays(10, VAOs);
+    glGenBuffers(10, VBOs);
 
-    // Centro Amarillo
+    //===========Centro Amarillo====================
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticesCentro), verticesCentro, GL_STATIC_DRAW);
     glBindVertexArray(VAOs[0]);
-
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     // normal attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+
+    //===========Circulo Rojo====================
+    glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesR), verticesR, GL_STATIC_DRAW);
+    glBindVertexArray(VAOs[1]);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
 
 
     // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
@@ -259,7 +313,7 @@ int main()
     // -----------
     while (!glfwWindowShouldClose(window))
     {
-        std::cout << "Luz: " << lightPos.x <<"," << lightPos.y <<"," << lightPos.z << "\n";
+        // std::cout << "Luz: " << lightPos.x <<"," << lightPos.y <<"," << lightPos.z << "\n";
         // per-frame time logic
         // --------------------
         float currentFrame = glfwGetTime();
@@ -275,29 +329,44 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-        //================Centro====================
-        // be sure to activate shader when setting uniforms/drawing objects
+        // Shader
         lightingShader.use();
-        lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
         lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("lightPos", lightPos);
         lightingShader.setVec3("viewPos", camera.Position);
-
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
+        glm::mat4 model;
 
+        //================Centro====================
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
+    
         // world transformation
-        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
 
-        // render the cube
+        // render
         glBindVertexArray(VAOs[0]);
         glDrawArrays(GL_TRIANGLES, 0, 100);
         reflect(VAOs[0], 100, lightingShader,model);
+
+        // ================Circulo Rojo====================
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.setVec3("objectColor",  1.0f, 0.0f, 0.0f);
+
+        // world transformation
+        model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
+
+        // render
+        glBindVertexArray(VAOs[1]);
+        glDrawArrays(GL_TRIANGLES, 0, 100);
+        reflect(VAOs[1], 100, lightingShader,model);
+
 
 
         // also draw the lamp object
@@ -372,7 +441,6 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
         lightPos.z = lightPos.z + change;
         
-
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
