@@ -28,7 +28,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -38,7 +38,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.f, 0.5f, 2.0f);
 float change = 0.02f;
 
 int main()
@@ -301,12 +301,70 @@ int main()
         0.16f,0.1f,0.3f, 0.01f, 0.004f, 0.0f,//H'
         0.26f,0.07f,0.3f, 0.01f, 0.004f, 0.0f,//N'
 
+        0.2f,0.0f,0.4f, 0.007f, -0.006f, 0.0f,//I
+        0.26f,0.07f,0.4f, 0.007f, -0.006f, 0.0f,//N
+        0.26f,0.07f,0.3f, 0.007f, -0.006f, 0.0f,//N'
 
+        0.2f,0.0f,0.4f, 0.007f, -0.006f, 0.0f,//I
+        0.26f,0.07f,0.3f, 0.007f, -0.006f, 0.0f,//N'
+        0.2f,0.0f,0.3f, 0.007f, -0.006f, 0.0f,//I' 
+    };
 
+    float verticesAm[]={
 
+        // Cara Enfrente
+        0.0f,0.1f,0.8f, 0.0f, 0.0f, 1.0f, //J
+        0.0f,0.2f,0.8f, 0.0f, 0.0f, 1.0f, //D  
+        0.025f,0.1f,0.8f, 0.0f, 0.0f, 1.0f,//E
 
+        0.025f,0.1f,0.8f, 0.0f, 0.0f, 1.0f,//E
+        0.095f,0.16f,0.8f, 0.0f, 0.0f, 1.0f,//C 
+        0.07f,0.068f,0.8f, 0.0f, 0.0f, 1.0f,//F
+
+        0.07f,0.068f,0.8f, 0.0f, 0.0f, 1.0f,//F
+        0.16f,0.1f,0.8f, 0.0f, 0.0f, 1.0f,//H
+        0.1,0.025,0.8f, 0.0f, 0.0f, 1.0f,//G
+
+        0.1,0.025,0.8f, 0.0f, 0.0f, 1.0f,//G 
+        0.1f,0.0f,0.8f, 0.0f, 0.0f, 1.0f,//K 
+        0.2f,0.0f,0.8f, 0.0f, 0.0f, 1.0f,//I 
+
+        // Cara Atras
+        0.0f,0.1f,0.7f, 0.0f, 0.0f, -1.0f, //J'
+        0.0f,0.2f,0.7f, 0.0f, 0.0f, -1.0f, //D'  
+        0.025f,0.1f,0.7f, 0.0f, 0.0f, -1.0f,//E'
+
+        0.025f,0.1f,0.7f, 0.0f, 0.0f, -1.0f,//E'
+        0.095f,0.16f,0.7f, 0.0f, 0.0f, -1.0f,//C' 
+        0.07f,0.068f,0.7f, 0.0f, 0.0f, -1.0f,//F'
+
+        0.07f,0.068f,0.7f, 0.0f, 0.0f, -1.0f,//F'
+        0.16f,0.1f,0.7f, 0.0f, 0.0f, -1.0f,//H'
+        0.1,0.025,0.7f, 0.0f, 0.0f, -1.0f,//G'
+
+        0.1,0.025,0.7f, 0.0f, 0.0f, -1.0f,//G'
+        0.1f,0.0f,0.7f, 0.0f, 0.0f, -1.0f,//K'
+        0.2f,0.0f,0.7f, 0.0f, 0.0f, -1.0f,//I'
+
+        // Lados
+        0.025f,0.1f,0.8f, 0.01f, 0.0025f, 0.0f,//E
+        0.0f,0.2f,0.8f, 0.01f, 0.0025f, 0.0f, //D
+        0.0f,0.2f,0.7f, 0.01f, 0.0025f, 0.0f, //D'
+
+        0.025f,0.1f,0.8f, 0.01f, 0.0025f, 0.0f,//E
+        0.0f,0.2f,0.7f, 0.01f, 0.0025f, 0.0f, //D'
+        0.025f,0.1f,0.7f, 0.01f, 0.0025f, 0.0f,//E'
+
+        0.095f,0.16f,0.8f, -0.006f, 0.007f, 0.0f,//C
+        0.025f,0.1f,0.8f, -0.006f, 0.007f, 0.0f,//E 
+        0.025f,0.1f,0.7f, -0.006f, 0.007f, 0.0f,//E'
+
+        0.095f,0.16f,0.8f, -0.006f, 0.007f, 0.0f,//C
+        0.025f,0.1f,0.7f, -0.006f, 0.007f, 0.0f,//E'
+        0.095f,0.16f,0.7f, -0.006f, 0.007f, 0.0f,//C' 
 
     };
+
     
     // first, configure the cube's VAO (and VBO)
     unsigned int VBOs[10], VAOs[10];
@@ -329,6 +387,18 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticesR), verticesR, GL_STATIC_DRAW);
     glBindVertexArray(VAOs[1]);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+
+    //===========Circulo Amarillo====================
+    glBindBuffer(GL_ARRAY_BUFFER, VBOs[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesAm), verticesAm, GL_STATIC_DRAW);
+    glBindVertexArray(VAOs[2]);
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -409,6 +479,19 @@ int main()
         glBindVertexArray(VAOs[1]);
         glDrawArrays(GL_TRIANGLES, 0, 200);
         reflect(VAOs[1], 200, lightingShader,model);
+
+        // ================Circulo Amarillo====================
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
+
+        // world transformation
+        model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
+
+        // render
+        glBindVertexArray(VAOs[2]);
+        glDrawArrays(GL_TRIANGLES, 0, 200);
+        reflect(VAOs[2], 200, lightingShader,model);
 
 
 
