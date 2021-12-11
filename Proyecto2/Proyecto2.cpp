@@ -14,6 +14,10 @@
 // Cambiar entre "camera.h" y "cameraFPS.h"
 #include "clases/camera.h"
 
+//Todo esto es para medir el tiempo
+#include <chrono>
+#include <ctime> 
+
 #include <iostream>
 
 
@@ -38,7 +42,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.f, 0.5f, 2.0f);
+glm::vec3 lightPos(0.f, 0.5f, 2.0f);
 float change = 0.02f;
 
 int main()
@@ -452,11 +456,38 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    //Variables para animacion
+    // auto start = std::chrono::system_clock::now();
+    float start = glfwGetTime();
+    float end;
+    // auto end = std::chrono::system_clock::now();
+    int fase = 0;
+    float elapsed_seconds;
 
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
+        // auto end = std::chrono::system_clock::now();
+        // std::chrono::duration<double> elapsed_seconds = end - start;
+
+        end = glfwGetTime();
+        elapsed_seconds = end - start;
+
+        // Indicador de fases
+        if (elapsed_seconds >= 5.0 && elapsed_seconds <= 10) {
+            fase = 1; //Fade-in de primeras capas de teselacion
+        }
+        else if (elapsed_seconds >=10 && elapsed_seconds <=15) {
+            fase = 2;  //Fade-in de ultimas caas de teselacioin
+        }
+        else if (elapsed_seconds >=15 && elapsed_seconds <= 20.0) {
+            fase = 3; //Baile
+        }
+        else if (elapsed_seconds >= 20.0 && elapsed_seconds <=25.0) {
+            fase = 4; //Fade out: teselacion se deshace, protagonista regresa
+        }
+
         // std::cout << "Luz: " << lightPos.x <<"," << lightPos.y <<"," << lightPos.z << "\n";
         // per-frame time logic
         // --------------------
@@ -473,11 +504,6 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Shader
-        lightingShader.use();
-        lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("lightPos", lightPos);
-        lightingShader.setVec3("viewPos", camera.Position);
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
@@ -485,59 +511,74 @@ int main()
         lightingShader.setMat4("view", view);
         glm::mat4 model;
 
-        //================Centro====================
-        // be sure to activate shader when setting uniforms/drawing objects
-        lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
-    
-        // world transformation
-        model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
 
-        // render
-        glBindVertexArray(VAOs[0]);
-        glDrawArrays(GL_TRIANGLES, 0, 100);
-        reflect(VAOs[0], 100, lightingShader,model);
+        if(fase>=1){
+            // La luz
+            lightCubeShader.use();
+            lightCubeShader.setMat4("projection", projection);
+            lightCubeShader.setMat4("view", view);
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, lightPos);
+            model = glm::scale(model, glm::vec3(0.1f)); // a smaller cube
+            lightCubeShader.setMat4("model", model);
+
+            glBindVertexArray(lightCubeVAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        };
+        
+
+        // Shader Teselación
+        lightingShader.use();
+        lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("lightPos", lightPos);
+        lightingShader.setVec3("viewPos", camera.Position);
+        
+
+        //================Centro====================
+        if(fase>=2){
+            // be sure to activate shader when setting uniforms/drawing objects
+            lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
+        
+            // world transformation
+            model = glm::mat4(1.0f);
+            lightingShader.setMat4("model", model);
+
+            // render
+            glBindVertexArray(VAOs[0]);
+            glDrawArrays(GL_TRIANGLES, 0, 100);
+            reflect(VAOs[0], 100, lightingShader,model);
+        };
 
         // ================Circulo Rojo====================
-        // be sure to activate shader when setting uniforms/drawing objects
-        lightingShader.setVec3("objectColor",  1.0f, 0.0f, 0.0f);
+        if(fase>=3){
+            // be sure to activate shader when setting uniforms/drawing objects
+            lightingShader.setVec3("objectColor",  1.0f, 0.0f, 0.0f);
 
-        // world transformation
-        model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
+            // world transformation
+            model = glm::mat4(1.0f);
+            lightingShader.setMat4("model", model);
 
-        // render
-        glBindVertexArray(VAOs[1]);
-        glDrawArrays(GL_TRIANGLES, 0, 200);
-        reflect(VAOs[1], 200, lightingShader,model);
-
+            // render
+            glBindVertexArray(VAOs[1]);
+            glDrawArrays(GL_TRIANGLES, 0, 200);
+            reflect(VAOs[1], 200, lightingShader,model);
+        };
+        
         // ================Circulo Amarillo====================
-        // be sure to activate shader when setting uniforms/drawing objects
-        lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
+        if(fase>=4){
+            // be sure to activate shader when setting uniforms/drawing objects
+            lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
 
-        // world transformation
-        model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
+            // world transformation
+            model = glm::mat4(1.0f);
+            lightingShader.setMat4("model", model);
 
-        // render
-        glBindVertexArray(VAOs[2]);
-        glDrawArrays(GL_TRIANGLES, 0, 200);
-        reflect(VAOs[2], 200, lightingShader,model);
-
-
-
-        // also draw the lamp object
-        lightCubeShader.use();
-        lightCubeShader.setMat4("projection", projection);
-        lightCubeShader.setMat4("view", view);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        lightCubeShader.setMat4("model", model);
-
-        glBindVertexArray(lightCubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-
+            // render
+            glBindVertexArray(VAOs[2]);
+            glDrawArrays(GL_TRIANGLES, 0, 200);
+            reflect(VAOs[2], 200, lightingShader,model);
+        };
+        
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
