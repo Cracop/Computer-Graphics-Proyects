@@ -26,6 +26,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 void reflect(unsigned int vao, int toDraw,Shader ourShader, glm::mat4 transform);
+unsigned int loadTexture(const char *path);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -87,6 +88,7 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
     glFrontFace(GL_CW);
+    glEnable(GL_BLEND);
 
 
     // build and compile our shader zprogram
@@ -463,6 +465,7 @@ int main()
     // auto end = std::chrono::system_clock::now();
     int fase = 0;
     float elapsed_seconds;
+    int band = 0;
 
     // render loop
     // -----------
@@ -476,16 +479,16 @@ int main()
 
         // Indicador de fases
         if (elapsed_seconds >= 5.0 && elapsed_seconds <= 10) {
-            fase = 1; //Fade-in de primeras capas de teselacion
+            fase = 1; 
         }
         else if (elapsed_seconds >=10 && elapsed_seconds <=15) {
-            fase = 2;  //Fade-in de ultimas caas de teselacioin
+            fase = 2;  
         }
         else if (elapsed_seconds >=15 && elapsed_seconds <= 20.0) {
-            fase = 3; //Baile
+            fase = 3; 
         }
         else if (elapsed_seconds >= 20.0 && elapsed_seconds <=25.0) {
-            fase = 4; //Fade out: teselacion se deshace, protagonista regresa
+            fase = 4; 
         }
 
         // std::cout << "Luz: " << lightPos.x <<"," << lightPos.y <<"," << lightPos.z << "\n";
@@ -494,6 +497,45 @@ int main()
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+        // Para mostrar el menu solo una vez
+        if(band == 0){
+            band = 1;
+            std::cout << "w - avanzar camara \n";
+            std::cout << "s - retroceder camara \n";
+            std::cout << "d - ir  la derecha camara \n";
+            std::cout << "a - ir  la izquierda camara \n";
+
+            std::cout << "\n";
+
+            std::cout << "e - cerrar ventana \n";
+
+            std::cout << "\n";
+
+            std::cout << "I - avanzar luz \n";
+            std::cout << "K - retroceder luz \n";
+            std::cout << "J - ir  la derecha luz \n";
+            std::cout << "L - ir  la izquierda luz \n";
+
+            std::cout << "\n";
+
+            std::cout << "o - elevar luz \n";
+            std::cout << "u - bajar luz \n";
+        };
+
+        // Menu para el usuario
+        // w - avanzar camara
+        // s - retroceder camara
+        // d - ir  la derecha camara
+        // a - ir  la izquierda camara
+        // e - cerrar ventana
+
+        // I - avanzar luz
+        // K - retroceder luz
+        // J - ir  la derecha luz
+        // L - ir  la izquierda luz
+        // o - elevar luz
+        // u - bajar luz
 
         // input
         // -----
