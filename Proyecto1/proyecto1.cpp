@@ -87,8 +87,6 @@ int main(){
         0.33f,0.0f,0.0f, //R 15
 
         0.0f,0.0f,0.0f, //Cero 16
-
-
     };
     //vamos de adentro a afuera
     //centro amarillo
@@ -348,7 +346,6 @@ int main(){
             // render container
             glBindVertexArray(VAOs[2]);
             glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
-
             reflect(VAOs[2], 18, ourShader, transform);
             
         }
@@ -379,12 +376,12 @@ int main(){
         transform = glm::mat4(1.0f);
 
         // Fase 0:entra
+        float salto = abs(sin(glfwGetTime()*4)*0.1);
         if (fase == 0) {
             transform = glm::mat4(1.0f);
-            transform = glm::translate(transform, glm::vec3(timeProxy / 5, 0.1f*sin(glfwGetTime()), 0.0f));
+            transform = glm::translate(transform, glm::vec3(timeProxy / 5, salto, 0.0f));
         }
         else if(fase>=1 && fase<=3) {
-            float salto = abs(sin(glfwGetTime()*4)*0.1);
             transform = glm::mat4(1.0f);
             transform = glm::translate(transform, glm::vec3(0.9f, salto, 0.0f)); // switched the order 
             
@@ -393,7 +390,7 @@ int main(){
             transform = glm::mat4(1.0f);
             transform = glm::translate(transform, glm::vec3(0.9, 0.0f, 0.0f));
             std::cout << timeProxy << "\n";
-            transform = glm::translate(transform, glm::vec3(-1*(20-timeProxy) / 5, 0.1f*sin(glfwGetTime()), 0.0f));
+            transform = glm::translate(transform, glm::vec3(-1*(20-timeProxy) / 5, salto, 0.0f));
         }
 
         shaderTextura.setMat4("transform", transform);
