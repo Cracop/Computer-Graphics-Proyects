@@ -99,9 +99,6 @@ namespace Tarea2V2{
             0.785f,-0.027f,0.0f,//67
             0.885f,0.0f,0.0f,//68
 
-            
-
-
         };
 
         //Triangulos Amarillos
