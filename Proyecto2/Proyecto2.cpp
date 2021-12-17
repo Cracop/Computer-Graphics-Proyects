@@ -93,7 +93,11 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
+    // Una luz
     Shader lightingShader("shaders/2.2.basic_lighting.vs", "shaders/2.2.basic_lighting.fs");
+    // Varias Luces
+    // Shader lightingShader("shaders/6.multiple_lights.vs", "shaders/6.multiple_lights.fs");
+    // El cubo de luz
     Shader lightCubeShader("shaders/2.2.light_cube.vs", "shaders/2.2.light_cube.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
