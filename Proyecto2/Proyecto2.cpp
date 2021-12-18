@@ -14,6 +14,14 @@
 // Cambiar entre "camera.h" y "cameraFPS.h"
 #include "clases/camera.h"
 
+// Para el menú
+#include "clases/ImGUI/imgui.h"
+#include "clases/ImGUI/imgui_impl_glfw.h"
+#include "clases/ImGUI/imgui_impl_opengl3.h"
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+#include <GLES2/gl2.h>
+#endif
+
 //Todo esto es para medir el tiempo
 #include <chrono>
 #include <ctime> 
@@ -61,7 +69,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Proyecto 2 - Rodrigo Barrera, Emilio Cantú", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -84,6 +92,28 @@ int main()
         return -1;
     }
 
+    // ImGUI
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+
+    // Our state
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
@@ -97,11 +127,8 @@ int main()
     // Una luz
     Shader lightingShader("shaders/2.2.basic_lighting.vs", "shaders/2.2.basic_lighting.fs");
     // Varias Luces
-    // Shader lightingShader("shaders/6.multiple_lights.vs", "shaders/6.multiple_lights.fs");
     // El cubo de luz
     Shader lightCubeShader("shaders/2.2.light_cube.vs", "shaders/2.2.light_cube.fs");
-    // Prueba del uniform
-    // Shader uniShader("shaders/2.2.basic_lighting.vs", "shaders/uniform.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -485,52 +512,25 @@ int main()
         elapsed_seconds = end - start;
 
         // Indicador de fases
-        if (elapsed_seconds >= 5.0 && elapsed_seconds <= 10) {
+        if (elapsed_seconds >= 3.0 && elapsed_seconds <= 6) {
             fase = 1; 
         }
-        else if (elapsed_seconds >=10 && elapsed_seconds <=15) {
+        else if (elapsed_seconds >6 && elapsed_seconds <=9) {
             fase = 2;  
         }
-        else if (elapsed_seconds >=15 && elapsed_seconds <= 20.0) {
+        else if (elapsed_seconds >12 && elapsed_seconds <= 15) {
             fase = 3; 
         }
-        else if (elapsed_seconds >= 20.0 && elapsed_seconds <=25.0) {
+        else if (elapsed_seconds > 15 && elapsed_seconds <=18) {
             fase = 4; 
         }
 
-        fase = 4;
 
-        // std::cout << "Luz: " << lightPos.x <<"," << lightPos.y <<"," << lightPos.z << "\n";
         // per-frame time logic
         // --------------------
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
-        // Para mostrar el menu solo una vez
-        if(band == 1){
-            band = 1;
-            std::cout << "w - avanzar camara \n";
-            std::cout << "s - retroceder camara \n";
-            std::cout << "d - ir  la derecha camara \n";
-            std::cout << "a - ir  la izquierda camara \n";
-
-            std::cout << "\n";
-
-            std::cout << "e - cerrar ventana \n";
-
-            std::cout << "\n";
-
-            std::cout << "I - avanzar luz \n";
-            std::cout << "K - retroceder luz \n";
-            std::cout << "J - ir  la derecha luz \n";
-            std::cout << "L - ir  la izquierda luz \n";
-
-            std::cout << "\n";
-
-            std::cout << "o - elevar luz \n";
-            std::cout << "u - bajar luz \n";
-        };
 
         // Menu para el usuario
         // w - avanzar camara
@@ -545,6 +545,34 @@ int main()
         // L - ir  la izquierda luz
         // o - elevar luz
         // u - bajar luz
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+        {
+            
+            ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+            ImGui::Begin("Controles");                          
+
+            ImGui::Text("w - avanzar camara \n"); 
+            ImGui::Text("s - retroceder camara \n");
+            ImGui::Text("d - ir  la derecha camara \n");
+            ImGui::Text("a - ir  la izquierda camara \n");
+
+            ImGui::Text("e - cerrar ventana \n");
+
+            ImGui::Text("I - avanzar luz \n");
+            ImGui::Text("K - retroceder luz \n");
+            ImGui::Text("J - ir  la derecha luz \n");
+            ImGui::Text("L - ir  la izquierda luz \n");
+
+            ImGui::Text("o - elevar luz \n");
+            ImGui::Text("u - bajar luz \n");             
+            ImGui::End();
+        }
 
         // input
         // -----
@@ -562,6 +590,9 @@ int main()
         lightingShader.setMat4("view", view);
         glm::mat4 model;
 
+        // Rendering
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if(fase>=1){
             // La luz
@@ -577,14 +608,12 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         };
         
-
         // Shader Teselación
         lightingShader.use();
         lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("lightPos", lightPos);
         lightingShader.setVec3("viewPos", camera.Position);
 
-        
         //================Centro====================
         if(fase>=2){
             // be sure to activate shader when setting uniforms/drawing objects
@@ -633,7 +662,6 @@ int main()
             reflect(VAOs[2], 200, lightingShader,model);
         };
         
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -645,6 +673,11 @@ int main()
     glDeleteVertexArrays(1, VAOs);
     glDeleteVertexArrays(1, &lightCubeVAO);
     glDeleteBuffers(1, VBOs);
+
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
@@ -734,6 +767,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 //Refleja a todos los cuadrantes
 void reflect(unsigned int vao, int toDraw,Shader ourShader, glm::mat4 transform) {
+    
     //glm::mat4 transform = glm::mat4(1.0f);
     //Transformacion (reflexion x)
     transform = glm::scale(transform, glm::vec3(1, -1, 1));
@@ -751,3 +785,6 @@ void reflect(unsigned int vao, int toDraw,Shader ourShader, glm::mat4 transform)
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, toDraw);
 }
+
+// g++ Proyecto2.cpp glad.c -ldl -lglfw 
+// g++ Proyecto2.cpp ./clases/ImGUI/imgui*.cpp glad.c -ldl -lglfw 
