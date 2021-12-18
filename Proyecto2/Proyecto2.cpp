@@ -89,6 +89,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glFrontFace(GL_CW);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
     // build and compile our shader zprogram
@@ -99,6 +100,8 @@ int main()
     // Shader lightingShader("shaders/6.multiple_lights.vs", "shaders/6.multiple_lights.fs");
     // El cubo de luz
     Shader lightCubeShader("shaders/2.2.light_cube.vs", "shaders/2.2.light_cube.fs");
+    // Prueba del uniform
+    // Shader uniShader("shaders/2.2.basic_lighting.vs", "shaders/uniform.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -495,6 +498,8 @@ int main()
             fase = 4; 
         }
 
+        fase = 4;
+
         // std::cout << "Luz: " << lightPos.x <<"," << lightPos.y <<"," << lightPos.z << "\n";
         // per-frame time logic
         // --------------------
@@ -503,7 +508,7 @@ int main()
         lastFrame = currentFrame;
 
         // Para mostrar el menu solo una vez
-        if(band == 0){
+        if(band == 1){
             band = 1;
             std::cout << "w - avanzar camara \n";
             std::cout << "s - retroceder camara \n";
@@ -578,12 +583,13 @@ int main()
         lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("lightPos", lightPos);
         lightingShader.setVec3("viewPos", camera.Position);
-        
 
+        
         //================Centro====================
         if(fase>=2){
             // be sure to activate shader when setting uniforms/drawing objects
             lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
+            lightingShader.setFloat("alpha", 1.0);
         
             // world transformation
             model = glm::mat4(1.0f);
@@ -599,6 +605,7 @@ int main()
         if(fase>=3){
             // be sure to activate shader when setting uniforms/drawing objects
             lightingShader.setVec3("objectColor",  1.0f, 0.0f, 0.0f);
+            lightingShader.setFloat("alpha", 1.0);
 
             // world transformation
             model = glm::mat4(1.0f);
@@ -614,6 +621,7 @@ int main()
         if(fase>=4){
             // be sure to activate shader when setting uniforms/drawing objects
             lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
+            lightingShader.setFloat("alpha", 0.5);
 
             // world transformation
             model = glm::mat4(1.0f);
