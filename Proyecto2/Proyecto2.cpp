@@ -618,7 +618,7 @@ int main()
         if(fase>=2){
             // be sure to activate shader when setting uniforms/drawing objects
             lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
-            lightingShader.setFloat("alpha", 1.0);
+            lightingShader.setFloat("alpha", 1.0); //Para que sea sólido
         
             // world transformation
             model = glm::mat4(1.0f);
@@ -634,7 +634,7 @@ int main()
         if(fase>=3){
             // be sure to activate shader when setting uniforms/drawing objects
             lightingShader.setVec3("objectColor",  1.0f, 0.0f, 0.0f);
-            lightingShader.setFloat("alpha", 1.0);
+            lightingShader.setFloat("alpha", 1.0); //Para que sea sólido
 
             // world transformation
             model = glm::mat4(1.0f);
@@ -650,7 +650,7 @@ int main()
         if(fase>=4){
             // be sure to activate shader when setting uniforms/drawing objects
             lightingShader.setVec3("objectColor",  0.87f, 0.734f, 0.082f);
-            lightingShader.setFloat("alpha", 0.5);
+            lightingShader.setFloat("alpha", 0.5); //Para que sea traslúcido
 
             // world transformation
             model = glm::mat4(1.0f);
